@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_toolbar',
     'widget_tweaks',
+    'webcomic_site.genre',
 ]
 
 MIDDLEWARE = [
@@ -87,6 +88,8 @@ except ImportError:
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
+
+DATABASE_TABLE_PREFIX = 'cjwc_'
 
 
 # Password validation
