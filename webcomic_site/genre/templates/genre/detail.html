@@ -1,0 +1,11 @@
+{% extends 'layouts/main_layout.html' %}
+
+{% block meta_description %}You can see many list comic in {{ genre.name }} genre's.{% endblock %}
+{% block meta_keywords %}comic,genre,list,read{% endblock %}
+{% block title %}{{ genre.name }}{% endblock %}
+
+{% block content %}
+  <div class="container my-3">
+    <h3>{{ genre.name }}</h3>
+  </div>
+{% endblock %}
