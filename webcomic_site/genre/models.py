@@ -12,7 +12,7 @@ class Genre(BaseModel):
 
     class Meta:
         db_table = settings.DATABASE_TABLE_PREFIX + 'genre'
-        ordering = ('-updated_at',)
+        ordering = ('name',)
 
     def __str__(self):
         return self.name
