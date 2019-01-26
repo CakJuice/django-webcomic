@@ -1,0 +1,32 @@
+{% extends 'layouts/main_layout.html' %}
+
+{% block meta_description %}Webcomic user login page{% endblock %}
+{% block meta_keywords %}Free Comic, Login, User{% endblock %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+  <div class="container my-3">
+    <div class="row justify-content-center">
+      <div class="col col-lg-4 col-md-6 col-8">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title">Login</h3>
+            <form method="POST" novalidate>
+              {% csrf_token %}
+              {% include 'includes/form.html' %}
+              <button type="submit" class="btn btn-primary btn-block">Login</button>
+            </form>
+          </div>
+          <div class="card-footer text-muted text-center">
+            Not registered yet? <a href="#">Sign up</a>
+          </div>
+        </div>
+        <div class="text-center py-2">
+          <small>
+            <a href="#" class="text-muted">Forgot your password?</a>
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
