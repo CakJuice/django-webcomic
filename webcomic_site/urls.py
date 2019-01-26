@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
+    path('', include('webcomic_site.base.urls')),
     path('admin/', admin.site.urls),
     path('genre/', include('webcomic_site.genre.urls')),
 ]
