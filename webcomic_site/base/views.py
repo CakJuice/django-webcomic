@@ -1,5 +1,6 @@
+from django.contrib import messages
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
-from django.contrib.auth import login as auth_login
 
 from .forms import SignupForm
 
@@ -21,9 +22,10 @@ def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            auth_login(request, user)
-            return redirect('homepage')
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+            return redirect('signup_success', username=user.username)
     else:
         form = SignupForm()
 
@@ -31,3 +33,18 @@ def signup(request):
         'form': form,
     }
     return render(request, 'base/signup.html', context)
+
+
+def signup_success(request, username):
+    """ Handle user signup success.
+    :param request: Page request.
+    :param username: Username of signup user.
+    :return: If there is valid username in param, it will render signup_success page, otherwise it will be
+    redirect to homepage.
+    """
+    try:
+        user = User.objects.get(username=username)
+        return render(request, 'base/signup_success.html', context={'email': user.email})
+    except Exception as e:
+        messages.success(request, "Signup success! Please check your email to activate your account.")
+        return redirect('homepage')
