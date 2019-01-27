@@ -1,0 +1,27 @@
+{% extends 'layouts/main_layout.html' %}
+
+{% block meta_description %}Register new user for webcomic{% endblock %}
+{% block meta_keywords %}signup, user, register{% endblock %}
+{% block title %}Signup{% endblock %}
+
+{% block content %}
+  <div class="container my-3">
+    <div class="row justify-content-center">
+      <div class="col col-lg-8 col-md-10 col-12">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title">Sign Up</h3>
+            <form method="POST" novalidate>
+              {% csrf_token %}
+              {% include 'includes/form.html' %}
+              <button type="submit" class="btn btn-primary">Create an account</button>
+            </form>
+          </div>
+          <div class="card-footer text-muted text-center">
+            Already have an account? <a href="{% url 'login' %}">Log in</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
