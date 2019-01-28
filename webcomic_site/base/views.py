@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from .forms import SignupForm
 
@@ -40,11 +40,7 @@ def signup_success(request, username):
     :param request: Page request.
     :param username: Username of signup user.
     :return: If there is valid username in param, it will render signup_success page, otherwise it will be
-    redirect to homepage.
+    redirect to 404.
     """
-    try:
-        user = User.objects.get(username=username)
-        return render(request, 'base/signup_success.html', context={'email': user.email})
-    except Exception as e:
-        messages.success(request, "Signup success! Please check your email to activate your account.")
-        return redirect('homepage')
+    user = get_object_or_404(User, username=username)
+    return render(request, 'base/signup_success.html', context={'email': user.email})
