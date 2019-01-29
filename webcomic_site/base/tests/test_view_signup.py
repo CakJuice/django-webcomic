@@ -4,6 +4,7 @@ from django.urls import reverse, resolve
 
 from webcomic_site.base import views
 from webcomic_site.base.forms import SignupForm
+from webcomic_site.base.models import UserActivation
 
 
 class SignupTests(TestCase):
@@ -33,7 +34,7 @@ class SignupTests(TestCase):
         self.assertContains(self.response, 'type="password"', 2)
 
 
-class SuccessfulSignupTests(TestCase):
+class BaseSignup(TestCase):
     def setUp(self):
         url = reverse('signup')
         data = {
@@ -45,6 +46,8 @@ class SuccessfulSignupTests(TestCase):
         self.response = self.client.post(url, data)
         self.success_url = reverse('signup_success', kwargs={'username': data['username']})
 
+
+class SuccessfulSignupTests(BaseSignup):
     def test_redirection(self):
         self.assertRedirects(self.response, self.success_url)
 
@@ -54,6 +57,11 @@ class SuccessfulSignupTests(TestCase):
     def test_user_not_active(self):
         user = User.objects.get(username='juice')
         self.assertFalse(user.is_active)
+
+
+class SuccessfulUserActivation(BaseSignup):
+    def test_user_activation_creation_after_signup(self):
+        self.assertTrue(UserActivation.objects.exists())
 
 
 class InvalidSignupTests(TestCase):

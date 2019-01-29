@@ -143,3 +143,6 @@ LOGOUT_REDIRECT_URL = 'homepage'
 LOGIN_REDIRECT_URL = 'homepage'
 
 INTERNAL_IPS = '127.0.0.1'
+
+# expire user activation (on days)
+EXPIRE_USER_ACTIVATION = 1
