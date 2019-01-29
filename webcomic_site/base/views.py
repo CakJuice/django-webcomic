@@ -25,8 +25,7 @@ def signup(request):
             user = form.save(commit=False)
             user.is_active = False
             user.save()
-            activation = UserActivation.objects.create(user=user)
-            activation.save()
+            UserActivation.objects.create(user=user)
             return redirect('signup_success', username=user.username)
     else:
         form = SignupForm()
