@@ -4,7 +4,7 @@ from django.urls import reverse, resolve
 
 from webcomic_site.base import views
 from webcomic_site.base.forms import SignupForm
-from webcomic_site.base.models import UserActivation
+from webcomic_site.base.models import UserActivation, Mail
 
 
 class SignupTests(TestCase):
@@ -39,7 +39,7 @@ class BaseSignup(TestCase):
         url = reverse('signup')
         data = {
             'username': 'juice',
-            'email': 'juice@test.com',
+            'email': 'hd.brandoz@gmail.com',
             'password1': 'test123456',
             'password2': 'test123456',
         }
@@ -62,6 +62,9 @@ class SuccessfulSignupTests(BaseSignup):
 class SuccessfulUserActivation(BaseSignup):
     def test_user_activation_creation_after_signup(self):
         self.assertTrue(UserActivation.objects.exists())
+
+    def test_mail_activation_creation(self):
+        self.assertTrue(Mail.objects.exists())
 
 
 class InvalidSignupTests(TestCase):

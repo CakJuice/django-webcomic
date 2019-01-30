@@ -146,3 +146,19 @@ INTERNAL_IPS = '127.0.0.1'
 
 # expire user activation (on days)
 EXPIRE_USER_ACTIVATION = 1
+
+# Email settings
+try:
+    EMAIL_HOST = local_settings.EMAIL_HOST
+    EMAIL_HOST_PASSWORD = local_settings.EMAIL_HOST_PASSWORD
+    EMAIL_HOST_USER = local_settings.EMAIL_HOST_USER
+    EMAIL_FROM = local_settings.EMAIL_FROM
+except ValueError:
+    print("[WARNING] Local settings for email not found, your application may not work properly!")
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+
+SITE_DOMAIN = 'http://localhost:8888'
