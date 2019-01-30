@@ -39,7 +39,6 @@ class UserActivation(models.Model):
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
         if force_insert:
-            print('--- this is force insert ---')
             self.create_mail_activation()
 
     def create_mail_activation(self):
