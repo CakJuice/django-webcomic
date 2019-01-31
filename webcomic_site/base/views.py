@@ -48,7 +48,7 @@ def signup_success(request, username):
 
 
 def user_activation(request, token):
-    activation = get_object_or_404(UserActivation, token=token)
+    activation = get_object_or_404(UserActivation, token=token, is_activated=False)
     if activation.activated():
         return render(request, 'base/user_activation_success.html')
 

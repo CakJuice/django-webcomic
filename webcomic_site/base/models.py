@@ -57,7 +57,7 @@ class UserActivation(models.Model):
         mail.send_mail()
 
     def activated(self):
-        if timezone.now() < self.expire_at:
+        if self.expire_at < timezone.now():
             return False
 
         self.is_activated = True
