@@ -1,4 +1,6 @@
+import os
 from datetime import timedelta
+from time import time
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -99,6 +101,7 @@ class Mail(BaseModel):
                 from_email=self.email_from,
                 to=self.email_to.split(','),
                 cc=self.email_cc.split(',') if self.email_cc else None,
+                attachments=[attachment.attachment_path for attachment in self.attachments.all()]
             )
             email.content_subtype = 'html'
             email.send()
@@ -107,3 +110,22 @@ class Mail(BaseModel):
             self.state = 'exception'
 
         self.save()
+
+
+def rename_attachment(instance, filename: str):
+    upload_to = 'mail_attachment/'
+    ext = filename.split('.')[-1]
+    new_path = '%s-%d.%s' % ('attachment', round(time() * 1000), ext,)
+    return os.path.join(upload_to, new_path)
+
+
+class MailAttachment(models.Model):
+    mail = models.ForeignKey(Mail, on_delete='CASCADE', related_name='attachments', verbose_name="Mail Reference")
+    attachment_url = models.FileField(upload_to=rename_attachment, verbose_name="Attachment")
+    attachment_path = models.TextField(verbose_name="Attachment Path", null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete='CASCADE', related_name='+', verbose_name="Created By")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
+
+    class Meta:
+        db_table = settings.DATABASE_TABLE_PREFIX + 'mail_attachment'
+        ordering = ('-created_at',)
