@@ -161,4 +161,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 
+EMAIL_ATTACHMENT_ROOT = 'mail_attachment'
+
 SITE_DOMAIN = 'http://localhost:8888'

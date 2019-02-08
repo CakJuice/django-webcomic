@@ -1,6 +1,6 @@
 import os
 from datetime import timedelta
-from time import time
+from uuid import uuid4
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -31,8 +31,7 @@ class UserActivation(models.Model):
     def __str__(self):
         return '%s - %s' % (self.user, self.token)
 
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         if not self.token:
             self.token = get_random_string(length=32)
         if not self.expire_at:
@@ -81,7 +80,7 @@ class Mail(BaseModel):
     email_from = models.CharField(max_length=255, verbose_name="From")
     email_to = models.TextField(verbose_name="To")
     email_cc = models.TextField(verbose_name="CC", null=True, blank=True)
-    subject = models.TextField(max_length=255, verbose_name="Subject")
+    subject = models.CharField(max_length=255, verbose_name="Subject")
     body = models.TextField(verbose_name="Body")
     state = models.CharField(max_length=24, choices=STATE_CHOICES, default='outgoing')
     send_at = models.DateTimeField(verbose_name="Send At", null=True, blank=True)
@@ -100,9 +99,13 @@ class Mail(BaseModel):
                 body=self.body,
                 from_email=self.email_from,
                 to=self.email_to.split(','),
-                cc=self.email_cc.split(',') if self.email_cc else None,
-                attachments=[attachment.attachment_path for attachment in self.attachments.all()]
+                cc=self.email_cc.split(',') if self.email_cc else None
             )
+
+            attachments = self.attachments.all()
+            for attach in attachments:
+                email.attach_file(attach.attachment.path)
+
             email.content_subtype = 'html'
             email.send()
             self.state = 'sent'
@@ -112,17 +115,16 @@ class Mail(BaseModel):
         self.save()
 
 
-def rename_attachment(instance, filename: str):
-    upload_to = 'mail_attachment/'
+def rename_attachment(instance, filename):
+    upload_to = settings.EMAIL_ATTACHMENT_ROOT
     ext = filename.split('.')[-1]
-    new_path = '%s-%d.%s' % ('attachment', round(time() * 1000), ext,)
+    new_path = 'attachment-%s.%s' % (uuid4().hex, ext,)
     return os.path.join(upload_to, new_path)
 
 
 class MailAttachment(models.Model):
     mail = models.ForeignKey(Mail, on_delete='CASCADE', related_name='attachments', verbose_name="Mail Reference")
-    attachment_url = models.FileField(upload_to=rename_attachment, verbose_name="Attachment")
-    attachment_path = models.TextField(verbose_name="Attachment Path", null=True, blank=True)
+    attachment = models.FileField(upload_to=rename_attachment, verbose_name="Attachment")
     created_by = models.ForeignKey(User, on_delete='CASCADE', related_name='+', verbose_name="Created By")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
 
