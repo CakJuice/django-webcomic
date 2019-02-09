@@ -131,3 +131,8 @@ class MailAttachment(models.Model):
     class Meta:
         db_table = settings.DATABASE_TABLE_PREFIX + 'mail_attachment'
         ordering = ('-created_at',)
+
+    def delete(self, using=None, keep_parents=False):
+        if os.path.isfile(self.attachment.path):
+            os.remove(self.attachment.path)
+        super().delete(using=using, keep_parents=keep_parents)
