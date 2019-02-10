@@ -25,7 +25,8 @@ def signup(request):
             user = form.save(commit=False)
             user.is_active = False
             user.save()
-            UserActivation.objects.create(user=user)
+            activation = UserActivation.objects.create(user=user)
+            activation.send_mail_activation(request)
             return redirect('signup_success', username=user.username)
     else:
         form = SignupForm()
@@ -48,6 +49,11 @@ def signup_success(request, username):
 
 
 def user_activation(request, token):
+    """ Handle user account activation.
+    :param request: Page request.
+    :param token: Token of activation. If token invalid, page will render activation expire
+    :return: If token valid, it will render success message. Otherwise, page will render activation expire.
+    """
     activation = get_object_or_404(UserActivation, token=token, is_activated=False)
     if activation.activated():
         return render(request, 'base/user_activation_success.html')

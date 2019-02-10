@@ -4,6 +4,7 @@ from uuid import uuid4
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.db import models
 from django.template.loader import get_template
@@ -32,30 +33,32 @@ class UserActivation(models.Model):
         return '%s - %s' % (self.user, self.token)
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        if not self.token:
+        if force_insert:
             self.token = get_random_string(length=32)
-        if not self.expire_at:
             self.expire_at = self.created_at + timedelta(days=settings.EXPIRE_USER_ACTIVATION)
 
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
-        if force_insert:
-            self.create_mail_activation()
+    def send_mail_activation(self, request):
+        link = '%s://%s%s' % ('https' if request.is_secure() else 'http', get_current_site(request).domain,
+                              reverse('user_activation', kwargs={'token': self.token}))
 
-    def create_mail_activation(self):
         ctx = {
             'username': self.user.username,
-            'link': settings.SITE_DOMAIN + reverse('user_activation', kwargs={'token': self.token}),
+            'link': link
         }
 
-        mail = Mail.objects.create(
-            email_from=settings.EMAIL_FROM,
-            email_to=self.user.email,
-            subject=self.MAIL_SUBJECT,
-            body=get_template('base/user_activation_mail.html').render(ctx)
-        )
-
-        mail.send_mail()
+        try:
+            email = EmailMessage(
+                subject=self.MAIL_SUBJECT,
+                body=get_template('base/user_activation_mail.html').render(ctx),
+                from_email=settings.EMAIL_FROM,
+                to=[self.user.email]
+            )
+            email.content_subtype = 'html'
+            email.send()
+        except Exception as e:
+            pass
 
     def activated(self):
         if self.expire_at < timezone.now():
