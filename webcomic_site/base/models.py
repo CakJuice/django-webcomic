@@ -4,13 +4,13 @@ from uuid import uuid4
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.db import models
 from django.template.loader import get_template
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.crypto import get_random_string
-from django.contrib.sites.shortcuts import get_current_site
 
 from webcomic_site.models import BaseModel
 
