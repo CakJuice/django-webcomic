@@ -1,6 +1,6 @@
 [
   {
-    "model": "genre.Genre",
+    "model": "comic.Genre",
     "pk": 1,
     "fields": {
       "name": "Drama",
@@ -12,7 +12,7 @@
     }
   },
   {
-    "model": "genre.Genre",
+    "model": "comic.Genre",
     "pk": 2,
     "fields": {
       "name": "Action",
@@ -24,7 +24,7 @@
     }
   },
   {
-    "model": "genre.Genre",
+    "model": "comic.Genre",
     "pk": 3,
     "fields": {
       "name": "Fantasy",
@@ -36,7 +36,7 @@
     }
   },
   {
-    "model": "genre.Genre",
+    "model": "comic.Genre",
     "pk": 4,
     "fields": {
       "name": "Slice of life",

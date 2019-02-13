@@ -19,9 +19,10 @@ from django.contrib.auth import views as auth_views
 from django.urls import path, include
 
 from webcomic_site.base import views as base_views
+from webcomic_site.comic import views as comic_views
 
 urlpatterns = [
-    # base views
+    # base routes
     path('', base_views.homepage, name='homepage'),
     path('signup/', base_views.signup, name='signup'),
     path('<username>/signup-success/', base_views.signup_success, name='signup_success'),
@@ -49,8 +50,11 @@ urlpatterns = [
         template_name='base/password_change_done.html'
     ), name='password_change_done'),
 
+    # admin routes
     path('admin/', admin.site.urls),
-    path('genre/', include('webcomic_site.genre.urls')),
+
+    # genre routes
+    path('genre/<slug>/', comic_views.genre_detail, name='genre_index')
 ]
 
 if settings.DEBUG:

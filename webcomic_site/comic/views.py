@@ -13,4 +13,4 @@ def genre_detail(request, slug):
     context = {
         'genre': genre
     }
-    return render(request, 'genre/detail.html', context=context)
+    return render(request, 'comic/genre_detail.html', context=context)

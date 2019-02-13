@@ -9,6 +9,7 @@ from webcomic_site.tools import get_unique_slug
 class Genre(BaseModel):
     name = models.CharField(max_length=64, verbose_name="Name")
     slug = models.CharField(max_length=70, verbose_name="Slug", db_index=True, blank=True, null=True)
+    description = models.CharField(max_length=160, verbose_name="Description", blank=True, null=True)
 
     class Meta:
         db_table = settings.DATABASE_TABLE_PREFIX + 'genre'
