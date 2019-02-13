@@ -1,9 +1,10 @@
 import os
 from base64 import b64encode
 from uuid import uuid4
+
 from django.conf import settings
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 
 from webcomic_site.models import BaseModel
 from webcomic_site.tools import get_unique_slug
@@ -69,5 +70,14 @@ class Comic(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated At")
 
+    class Meta:
+        db_table = settings.DATABASE_TABLE_PREFIX + 'comic'
+        ordering = ('title',)
+
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug or self.slug == '':
+            self.slug = get_unique_slug(Comic, self.title)
+        super().save(*args, **kwargs)
