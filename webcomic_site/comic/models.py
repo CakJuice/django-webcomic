@@ -1,5 +1,9 @@
+import os
+from base64 import b64encode
+from uuid import uuid4
 from django.conf import settings
 from django.db import models
+from django.contrib.auth.models import User
 
 from webcomic_site.models import BaseModel
 from webcomic_site.tools import get_unique_slug
@@ -22,3 +26,48 @@ class Genre(BaseModel):
         if not self.slug or self.slug == '':
             self.slug = get_unique_slug(Genre, self.name)
         super().save(*args, **kwargs)
+
+
+def get_upload_comic_path(instance=None):
+    path = 'uploads/comic/'
+    if instance:
+        dirname = b64encode(str(instance.id).encode())
+        path += '%s/' % (dirname.decode('utf-8'),)
+    return path
+
+
+def upload_comic_banner(instance, filename):
+    path = get_upload_comic_path(instance=instance)
+    ext = filename.split('.')[-1]
+    new_name = 'banner-%s.%s' % (uuid4().hex, ext)
+    return os.path.join(path, new_name)
+
+
+def upload_comic_thumbnail(instance, filename):
+    path = get_upload_comic_path(instance=instance)
+    ext = filename.split('.')[-1]
+    new_name = 'thumbnail-%s.%s' % (uuid4().hex, ext)
+    return os.path.join(path, new_name)
+
+
+class Comic(models.Model):
+    STATE = [
+        (0, 'Draft'),
+        (1, 'Published'),
+        (9, 'Archived'),
+    ]
+
+    title = models.CharField(max_length=120, verbose_name="Title")
+    description = models.CharField(max_length=160, verbose_name="Description")
+    genre = models.ForeignKey(Genre, on_delete=models.PROTECT, related_name='comics', verbose_name="Genre")
+    author = models.ForeignKey(User, on_delete=models.PROTECT, related_name='comics', verbose_name="Author")
+    slug = models.CharField(max_length=130, unique=True, db_index=True, verbose_name="Slug", blank=True)
+    thumbnail = models.ImageField(upload_to=upload_comic_thumbnail, verbose_name="Thumbnail", blank=True, null=True)
+    banner = models.ImageField(upload_to=upload_comic_banner, verbose_name="Banner", blank=True, null=True)
+    state = models.IntegerField(choices=STATE, verbose_name="State", default=0)
+    publish_date = models.DateTimeField(verbose_name="Publish Date", blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated At")
+
+    def __str__(self):
+        return self.title
