@@ -4,6 +4,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import UserActivation
 from .forms import SignupForm
 
+from webcomic_site.comic.models import Comic
+
 
 # Create your views here.
 def homepage(request):
@@ -11,7 +13,11 @@ def homepage(request):
     :param request: Page request.
     :return: Renderer page for user with template as param.
     """
-    return render(request, 'base/homepage.html')
+    comics = Comic.objects.all()
+    context = {
+        'comics': comics
+    }
+    return render(request, 'base/homepage.html', context=context)
 
 
 def signup(request):
