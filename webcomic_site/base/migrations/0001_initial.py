@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'cjwc_mail',
-                'ordering': ('-created_at',),
+                'ordering': ['-created_at'],
             },
         ),
         migrations.CreateModel(
@@ -47,7 +47,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'cjwc_mail_attachment',
-                'ordering': ('-created_at',),
+                'ordering': ['-created_at'],
             },
         ),
         migrations.CreateModel(
@@ -62,7 +62,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'cjwc_user_activation',
-                'ordering': ('-created_at',),
+                'ordering': ['-created_at'],
             },
         ),
     ]

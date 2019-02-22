@@ -18,7 +18,7 @@ class Genre(BaseModel):
 
     class Meta:
         db_table = settings.DATABASE_TABLE_PREFIX + 'genre'
-        ordering = ('name',)
+        ordering = ['name']
 
     def __str__(self):
         return self.name
@@ -72,7 +72,7 @@ class Comic(models.Model):
 
     class Meta:
         db_table = settings.DATABASE_TABLE_PREFIX + 'comic'
-        ordering = ('title',)
+        ordering = ['title']
 
     def __str__(self):
         return self.title

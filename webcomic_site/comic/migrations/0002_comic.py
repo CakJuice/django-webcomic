@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'cjwc_comic',
-                'ordering': ('title',),
+                'ordering': ['title'],
             },
         ),
     ]

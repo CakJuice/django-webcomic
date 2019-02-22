@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'cjwc_genre',
-                'ordering': ('name',),
+                'ordering': ['name'],
             },
         ),
     ]

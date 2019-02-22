@@ -27,7 +27,7 @@ class UserActivation(models.Model):
 
     class Meta:
         db_table = settings.DATABASE_TABLE_PREFIX + 'user_activation'
-        ordering = ('-created_at',)
+        ordering = ['-created_at']
 
     def __str__(self):
         return '%s - %s' % (self.user, self.token)
@@ -90,7 +90,7 @@ class Mail(BaseModel):
 
     class Meta:
         db_table = settings.DATABASE_TABLE_PREFIX + 'mail'
-        ordering = ('-created_at',)
+        ordering = ['-created_at']
 
     def __str__(self):
         return self.subject
@@ -133,7 +133,7 @@ class MailAttachment(models.Model):
 
     class Meta:
         db_table = settings.DATABASE_TABLE_PREFIX + 'mail_attachment'
-        ordering = ('-created_at',)
+        ordering = ['-created_at']
 
     def delete(self, using=None, keep_parents=False):
         if os.path.isfile(self.attachment.path):
