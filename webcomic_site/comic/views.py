@@ -18,7 +18,7 @@ class GenreDetailView(DetailView):
 @method_decorator(login_required, name='dispatch')
 class ComicCreateView(SuccessMessageMixin, CreateView):
     model = Comic
-    fields = ('title', 'description', 'genre',)
+    fields = ['title', 'description', 'genre']
     template_name = 'comic/create.html'
     success_message = 'Congratulation! You have created a new comic.'
 
