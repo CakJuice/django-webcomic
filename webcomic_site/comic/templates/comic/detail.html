@@ -1,12 +1,17 @@
 {% extends 'layouts/main_layout.html' %}
 
 {% block meta_description %}{{ comic.description }}{% endblock %}
-{% block meta_keywords %}read,comic,free,{{ comic.genre.name|lower }}{% endblock %}
+{% block meta_keywords %}Read, Comic, Free,{{ comic.genre.name }}{% endblock %}
 {% block title %}{{ comic.title }}{% endblock %}
 
 {% block content %}
   <div class="container my-3">
+    {% if messages %}
+      {% include 'includes/alert_message.html' %}
+    {% endif %}
+
     <h3>{{ comic.title }}</h3>
+
     <p>{{ comic.description }}</p>
   </div>
 {% endblock %}

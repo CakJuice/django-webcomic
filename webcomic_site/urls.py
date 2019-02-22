@@ -59,6 +59,7 @@ urlpatterns = [
     # comic routes
     path('comic/create/', comic_views.ComicCreateView.as_view(), name='comic_create'),
     path('<slug:slug>/', comic_views.ComicDetailView.as_view(), name='comic_detail'),
+    path('<slug:slug>/update/', comic_views.ComicUpdateView.as_view(), name='comic_update'),
 ]
 
 if settings.DEBUG:
