@@ -9,7 +9,7 @@ from webcomic_site.comic.models import Comic
 
 # Create your views here.
 def homepage(request):
-    """ Display homepage request.
+    """Display homepage request.
     :param request: Page request.
     :return: Renderer page for user with template as param.
     """
@@ -21,7 +21,7 @@ def homepage(request):
 
 
 def signup(request):
-    """ Handle signup/registration for new user.
+    """Handle signup/registration for new user.
     :param request: Page request.
     :return: Renderer page for user with template and context as params.
     """
@@ -44,7 +44,7 @@ def signup(request):
 
 
 def signup_success(request, username):
-    """ Handle user signup success.
+    """Handle user signup success.
     :param request: Page request.
     :param username: Username of signup user.
     :return: If there is valid username in param, it will render signup_success page, otherwise it will be
@@ -55,7 +55,7 @@ def signup_success(request, username):
 
 
 def user_activation(request, token):
-    """ Handle user account activation.
+    """Handle user account activation.
     :param request: Page request.
     :param token: Token of activation. If token invalid, page will render activation expire
     :return: If token valid, it will render success message. Otherwise, page will render activation expire.
