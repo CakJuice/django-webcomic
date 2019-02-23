@@ -1,10 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import HttpResponseForbidden
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
-from django.http import HttpResponseForbidden
 
 from .models import Genre, Comic
 
@@ -36,7 +37,6 @@ class ComicDetailView(DetailView):
     template_name = 'comic/detail.html'
 
 
-# @method_decorator(login_required, name='dispatch')
 class ComicUpdateView(SuccessMessageMixin, UpdateView):
     model = Comic
     template_name = 'comic/update.html'
@@ -53,3 +53,21 @@ class ComicUpdateView(SuccessMessageMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('comic_detail', args=[self.object.slug])
+
+
+@login_required
+def action_state(request, slug, state):
+    """ Set comic state
+    :param request: Page request.
+    :param slug: Comic slug.
+    :param state: State value to be set.
+    :return: If success redirect to comic detail page. Otherwise to 404 or 403.
+    """
+    comic = get_object_or_404(Comic, slug=slug)
+    if request.user == comic.author:
+        comic_state = [cs[0] for cs in comic.STATE]
+        state = int(state)
+        if state in comic_state:
+            comic.set_state(state)
+            return redirect('comic_detail', slug=slug)
+    return HttpResponseForbidden()

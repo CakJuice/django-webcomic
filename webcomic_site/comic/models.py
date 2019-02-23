@@ -5,6 +5,7 @@ from uuid import uuid4
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 
 from webcomic_site.models import BaseModel
 from webcomic_site.tools import get_unique_slug
@@ -81,3 +82,9 @@ class Comic(models.Model):
         if not self.slug or self.slug == '':
             self.slug = get_unique_slug(Comic, self.title)
         super().save(*args, **kwargs)
+
+    def set_state(self, state):
+        self.state = state
+        if state == 1:
+            self.publish_date = timezone.now()
+        self.save()
