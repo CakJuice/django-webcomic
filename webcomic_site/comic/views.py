@@ -1,3 +1,4 @@
+import os
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseForbidden
@@ -6,6 +7,7 @@ from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
+from django.conf import settings
 
 from .models import Genre, Comic
 
@@ -42,6 +44,8 @@ class ComicUpdateView(SuccessMessageMixin, UpdateView):
     template_name = 'comic/update.html'
     fields = ['title', 'description', 'genre', 'thumbnail', 'banner', 'state']
     success_message = 'Success! Comic has been updated.'
+    last_thumbnail = None
+    last_banner = None
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -49,10 +53,25 @@ class ComicUpdateView(SuccessMessageMixin, UpdateView):
         obj = self.get_object()
         if request.user != obj.author:
             return HttpResponseForbidden()
+        self.last_thumbnail = obj.thumbnail
+        self.last_banner = obj.banner
         return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
         return reverse('comic_detail', args=[self.object.slug])
+
+    def form_valid(self, form):
+        if self.last_thumbnail:
+            new_thumbnail = form.cleaned_data.get('thumbnail')
+            if self.last_thumbnail != new_thumbnail:
+                os.remove(os.path.join(settings.MEDIA_ROOT, self.last_thumbnail.path))
+
+        if self.last_banner:
+            new_banner = form.cleaned_data.get('banner')
+            if self.last_banner != new_banner:
+                os.remove(os.path.join(settings.MEDIA_ROOT, self.last_banner.path))
+
+        return super().form_valid(form)
 
 
 @login_required
