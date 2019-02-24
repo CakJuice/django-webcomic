@@ -3,7 +3,7 @@ from datetime import timedelta
 from uuid import uuid4
 
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.db import models
@@ -12,10 +12,27 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.crypto import get_random_string
 
-from webcomic_site.models import BaseModel
-
 
 # Create your models here.
+class User(AbstractUser):
+    is_author = models.BooleanField(verbose_name="Is Author", default=False)
+
+    class Meta(AbstractUser.Meta):
+        swappable = 'AUTH_USER_MODEL'
+
+
+class BaseModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated At")
+    created_by = models.ForeignKey(User, on_delete='RESTRICT', blank=True, null=True,
+                                   related_name='+', verbose_name="Created By")
+    updated_by = models.ForeignKey(User, on_delete='RESTRICT', blank=True, null=True,
+                                   related_name='+', verbose_name="Updated By")
+
+    class Meta:
+        abstract = True
+
+
 class UserActivation(models.Model):
     MAIL_SUBJECT = 'Webcomic Account Activation'
 

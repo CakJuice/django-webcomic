@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'y5+$ul1@^$9@9$xdpjct8#qpt+b^quj-h9^y%q8ppw0sh%et6o'
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
-
 
 # Application definition
 
@@ -75,12 +73,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'webcomic_site.wsgi.application'
 
+# Custom User
+AUTH_USER_MODEL = 'base.User'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
 try:
     from . import local_settings
+
     DATABASES = local_settings.DATABASES
 except ImportError:
     print("[WARNING] Local settings not found, trying to get DATABASE_URL from local environment")
@@ -92,7 +92,6 @@ except ImportError:
     }
 
 DATABASE_TABLE_PREFIX = 'cjwc_'
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -112,7 +111,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -125,7 +123,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
