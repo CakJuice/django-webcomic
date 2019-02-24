@@ -11,7 +11,10 @@
     {% endif %}
 
     <h3>{{ comic.title }}</h3>
-    <p>{{ comic.get_state_display }}</p>
+    <p>
+      Genre: <a href="{% url 'genre_detail' slug=comic.genre.slug %}">{{ comic.genre.name }}</a>
+      - {{ comic.get_state_display }}
+    </p>
 
     <p>{{ comic.description }}</p>
 

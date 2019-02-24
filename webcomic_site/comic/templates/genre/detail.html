@@ -14,5 +14,13 @@
 {% block content %}
   <div class="container my-3">
     <h3>{{ genre.name }}</h3>
+
+    {% for comic in comics %}
+      <h4>
+        <a href="{% url 'comic_detail' slug=comic.slug %}">{{ comic.title }}</a>
+      </h4>
+    {% empty %}
+      <h4>Sorry, there are no comics for this genre.</h4>
+    {% endfor %}
   </div>
 {% endblock %}

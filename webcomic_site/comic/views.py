@@ -14,17 +14,22 @@ from django.views.generic.edit import CreateView, UpdateView
 from .models import Genre, Comic
 
 
-# Create your views here.
+# # Create your views here.
 class GenreDetailView(DetailView):
     model = Genre
     template_name = 'genre/detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comics'] = self.object.comics.filter(state=1)
+        return context
 
 
 # check https://docs.djangoproject.com/en/2.1/topics/class-based-views/intro/ for decorating the class
 @method_decorator(login_required, name='dispatch')
 class ComicCreateView(SuccessMessageMixin, CreateView):
     model = Comic
-    fields = ['title', 'description', 'genre']
+    fields = ['title', 'description', 'genre', 'thumbnail', 'banner']
     template_name = 'comic/create.html'
     success_message = 'Congratulation! You have created a new comic.'
 

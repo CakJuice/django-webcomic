@@ -54,7 +54,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # genre routes
-    path('genre/<slug:slug>/', comic_views.GenreDetailView.as_view(), name='genre_index'),
+    path('genre/<slug:slug>/', comic_views.GenreDetailView.as_view(), name='genre_detail'),
 
     # comic routes
     path('comic/create/', comic_views.ComicCreateView.as_view(), name='comic_create'),
