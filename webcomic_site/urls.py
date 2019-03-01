@@ -54,12 +54,13 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # genre routes
-    path('genre/<slug:slug>/', comic_views.GenreDetailView.as_view(), name='genre_index'),
+    path('genre/<slug:slug>/', comic_views.GenreDetailView.as_view(), name='genre_detail'),
 
     # comic routes
     path('comic/create/', comic_views.ComicCreateView.as_view(), name='comic_create'),
     path('<slug:slug>/', comic_views.ComicDetailView.as_view(), name='comic_detail'),
     path('<slug:slug>/update/', comic_views.ComicUpdateView.as_view(), name='comic_update'),
+    path('<slug:slug>/<state>/', comic_views.action_state, name='comic_state'),
 ]
 
 if settings.DEBUG:

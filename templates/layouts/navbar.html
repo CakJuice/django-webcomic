@@ -13,7 +13,7 @@
              aria-haspopup="true" aria-expanded="false">Genre</a>
           <div class="dropdown-menu" aria-labelledby="genreDropdown">
             {% for genre in comic_genre %}
-              <a class="dropdown-item" href="#">{{ genre.name }}</a>
+              <a class="dropdown-item" href="{% url 'genre_detail' slug=genre.slug %}">{{ genre.name }}</a>
             {% endfor %}
           </div>
         </li>
@@ -24,7 +24,7 @@
             <a class="nav-link dropdown-toggle" id="userNavbarDropdown" role="button" href="#" data-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false">{{ user.get_username }}</a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-              <a class="dropdown-item" href="#">Create New Comic</a>
+              <a class="dropdown-item" href="{% url 'comic_create' %}">Create New Comic</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
             </div>
