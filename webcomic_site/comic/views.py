@@ -1,7 +1,7 @@
 import os
 
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
@@ -27,6 +27,7 @@ class GenreDetailView(DetailView):
 
 # check https://docs.djangoproject.com/en/2.1/topics/class-based-views/intro/ for decorating the class
 @method_decorator(login_required, name='dispatch')
+@method_decorator(permission_required('comic.add_comic', raise_exception=True), name='dispatch')
 class ComicCreateView(SuccessMessageMixin, CreateView):
     model = Comic
     fields = ['title', 'description', 'genre', 'thumbnail', 'banner']
@@ -84,7 +85,7 @@ class ComicUpdateView(SuccessMessageMixin, UpdateView):
         # If request user isn't author, set to 403.
         obj = self.get_object()
         if request.user != obj.author:
-            raise Http404
+            raise PermissionDenied
         self.last_thumbnail = obj.thumbnail
         self.last_banner = obj.banner
         return super().dispatch(request, *args, **kwargs)
