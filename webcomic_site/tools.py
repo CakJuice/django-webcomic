@@ -1,8 +1,8 @@
 """ List of tools which can we use in webcomic_site project
 """
 
-from django.utils.crypto import get_random_string
 from django.utils.text import slugify
+from django.utils.crypto import get_random_string
 
 
 def get_unique_slug(text):
@@ -25,7 +25,7 @@ def get_unique_model_slug(model, value):
         last_slug = last_obj[0].slug.split('-')
         try:
             last_idx = int(last_slug[-1])
-            slug += '-%d' & (last_idx + 1,)
+            slug += '-%d' % (last_idx + 1,)
         except ValueError:
             slug += '-2'
 
