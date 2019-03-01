@@ -3,7 +3,7 @@ from datetime import timedelta
 from uuid import uuid4
 
 from django.conf import settings
-from django.contrib.auth.models import AbstractUser, Group
+from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.db import models
@@ -14,22 +14,6 @@ from django.utils.crypto import get_random_string
 
 
 # Create your models here.
-class User(AbstractUser):
-    """Use custom user just to prepare if we need a custom user in the future.
-    """
-
-    class Meta(AbstractUser.Meta):
-        swappable = 'AUTH_USER_MODEL'
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        # Always set to reader group when create user.
-        if 'force_insert' in kwargs:
-            reader_group = Group.objects.get(name='reader')
-            if reader_group:
-                reader_group.user_set.add(self)
-
-
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated At")

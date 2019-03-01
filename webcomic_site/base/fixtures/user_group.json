@@ -5,12 +5,5 @@
     "fields": {
       "name": "author"
     }
-  },
-  {
-    "model": "auth.Group",
-    "pk": 2,
-    "fields": {
-      "name": "reader"
-    }
   }
 ]

@@ -1,13 +1,7 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
 
 from webcomic_site.admin import BaseAdmin
-from .models import User, Mail, MailAttachment
-
-
-@admin.register(User)
-class UserAdmin(UserAdmin):
-    pass
+from .models import Mail, MailAttachment
 
 
 @admin.register(Mail)

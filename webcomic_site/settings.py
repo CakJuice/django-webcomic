@@ -73,9 +73,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'webcomic_site.wsgi.application'
 
-# Custom User
-AUTH_USER_MODEL = 'base.User'
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 try:
