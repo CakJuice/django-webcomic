@@ -79,7 +79,7 @@ class Comic(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug or self.slug == '':
-            self.slug = get_unique_slug(Comic, self.title)
+            self.slug = get_unique_slug(self.title)
         super().save(*args, **kwargs)
 
     def set_state(self, state):
