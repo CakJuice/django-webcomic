@@ -11,7 +11,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 
-from .models import Genre, Comic
+from .models import Genre, Comic, ComicChapter
 
 
 # # Create your views here.
@@ -116,10 +116,38 @@ def action_state(request, slug, state):
     :return: If success redirect to comic detail page. Otherwise to 404 or 403.
     """
     comic = get_object_or_404(Comic, slug=slug)
-    if request.user == comic.author:
-        comic_state = [cs[0] for cs in comic.STATE]
-        state = int(state)
-        if state in comic_state:
-            comic.set_state(state)
-            return redirect('comic_detail', slug=slug)
-    raise PermissionDenied
+    if request.user != comic.author:
+        raise PermissionDenied
+
+    comic_state = [cs[0] for cs in comic.STATE]
+    state = int(state)
+    if state in comic_state:
+        comic.set_state(state)
+
+    return redirect('comic_detail', slug=slug)
+
+
+class ChapterCreateView(SuccessMessageMixin, CreateView):
+    model = ComicChapter
+    fields = ['title', 'thumbnail']
+    template_name = 'chapter/create.html'
+    success_message = 'Congratulation! You have created a new chapter.'
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        self.comic = get_object_or_404(Comic, slug=kwargs['comic_slug'])
+        if request.user != self.comic.author:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comic_slug'] = self.comic.slug
+        return context
+
+    def form_valid(self, form):
+        form.instance.comic = self.comic
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('comic_detail', args=[self.comic.slug])

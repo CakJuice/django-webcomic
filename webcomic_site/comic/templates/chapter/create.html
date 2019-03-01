@@ -1,17 +1,17 @@
 {% extends 'layouts/main_layout.html' %}
 
-{% block meta_description %}Create your new comic{% endblock %}
-{% block meta_keywords %}Comic, Create{% endblock %}
-{% block title %}Create New Comic{% endblock %}
+{% block meta_description %}Create your new comic chapter{% endblock %}
+{% block meta_keywords %}Comic, Create, Chapter{% endblock %}
+{% block title %}Create New Chapter{% endblock %}
 
 {% block content %}
   <div class="container my-3">
-    <h3>Create New Comic</h3>
+    <h3>Create New Chapter</h3>
     <form method="POST" enctype="multipart/form-data" novalidate>
       {% csrf_token %}
       {% include 'includes/form.html' %}
       <button type="submit" class="btn btn-success">Submit</button>
-      <a role="button" class="btn btn-secondary" href="{% url 'homepage' %}">Cancel</a>
+      <a role="button" class="btn btn-secondary" href="{% url 'comic_detail' slug=comic_slug %}">Cancel</a>
     </form>
   </div>
 {% endblock %}
