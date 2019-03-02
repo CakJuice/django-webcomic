@@ -1,7 +1,7 @@
 {% extends 'layouts/main_layout.html' %}
 
 {% block meta_description %}{{ comic.description }}{% endblock %}
-{% block meta_keywords %}Read, Comic, Free,{{ comic.genre.name }}{% endblock %}
+{% block meta_keywords %}Read, Comic, Free, {{ comic.genre.name }}{% endblock %}
 {% block title %}{{ comic.title }}{% endblock %}
 
 {% block content %}
@@ -28,5 +28,11 @@
         <a role="button" href="{% url 'comic_state' slug=comic.slug state=0 %}" class="btn btn-secondary">Set to Draft</a>
       {% endif %}
     {% endif %}
+
+    {% for chapter in chapters %}
+      <h3>
+        <a href="{% url 'chapter_detail' comic_slug=comic.slug chapter_slug=chapter.slug %}">{{ chapter.title }}</a>
+      </h3>
+    {% endfor %}
   </div>
 {% endblock %}

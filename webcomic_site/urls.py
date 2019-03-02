@@ -60,10 +60,11 @@ urlpatterns = [
     path('comic/create/', comic_views.ComicCreateView.as_view(), name='comic_create'),
     path('<slug:slug>/', comic_views.ComicDetailView.as_view(), name='comic_detail'),
     path('<slug:slug>/update/', comic_views.ComicUpdateView.as_view(), name='comic_update'),
-    path('<slug:slug>/<state>/', comic_views.action_state, name='comic_state'),
+    path('<slug:slug>/update-state/<int:state>/', comic_views.action_state, name='comic_state'),
 
     # chapter routes
     path('<slug:comic_slug>/chapter/create/', comic_views.ChapterCreateView.as_view(), name='chapter_create'),
+    path('<slug:comic_slug>/<slug:chapter_slug>/', comic_views.ChapterDetailView.as_view(), name='chapter_detail'),
 ]
 
 if settings.DEBUG:

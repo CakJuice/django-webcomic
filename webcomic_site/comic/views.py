@@ -14,7 +14,34 @@ from django.views.generic.edit import CreateView, UpdateView
 from .models import Genre, Comic, ComicChapter
 
 
-# # Create your views here.
+# Create your views here.
+class CustomDetailView(DetailView):
+    def dispatch(self, request, *args, **kwargs):
+        """Override function.
+        Handle detail view page.
+        Need to check is comic / chapter state = publish.
+        If comic / chapter not publish, then check whether the user is logged in.
+        If the user logged in then check whether the user is comic author or superuser.
+        If the user is the author then call super function.
+        Otherwise raise 404 page.
+        :param request: Page request.
+        :param args: Arguments.
+        :param kwargs: Keyword arguments.
+        :return: If allowed then call super function. Otherwise raise 404 page.
+        """
+        is_allowed = False
+        obj = self.get_object()
+        if request.user.is_authenticated:
+            if request.user.is_superuser or request.user == obj.author:
+                is_allowed = True
+        else:
+            if obj.state == 1:
+                is_allowed = True
+        if is_allowed:
+            return super().dispatch(request, *args, **kwargs)
+        raise Http404
+
+
 class GenreDetailView(DetailView):
     model = Genre
     template_name = 'genre/detail.html'
@@ -42,34 +69,15 @@ class ComicCreateView(SuccessMessageMixin, CreateView):
         return super().form_valid(form)
 
 
-class ComicDetailView(DetailView):
+class ComicDetailView(CustomDetailView):
     model = Comic
     template_name = 'comic/detail.html'
+    context_object_name = 'comic'
 
-    def dispatch(self, request, *args, **kwargs):
-        """Override function.
-        Handle comic detail view page.
-        Need to check is comic state = publish.
-        If comic not publish, then check whether the user is logged in.
-        If the user logged in then check whether the user is comic author.
-        If the user is the author then call super function.
-        Otherwise raise 404 page.
-        :param request: Page request.
-        :param args: Arguments.
-        :param kwargs: Keyword arguments.
-        :return: If allowed then call super function. Otherwise raise 404 page.
-        """
-        obj = self.get_object()
-        is_allowed = False
-        if obj.state == 1:
-            is_allowed = True
-        else:
-            if request.user.is_authenticated and request.user == obj.author:
-                is_allowed = True
-
-        if is_allowed:
-            return super().dispatch(request, *args, **kwargs)
-        raise Http404
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['chapters'] = self.object.chapters.all()
+        return context
 
 
 class ComicUpdateView(SuccessMessageMixin, UpdateView):
@@ -136,9 +144,9 @@ class ChapterCreateView(SuccessMessageMixin, CreateView):
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         self.comic = get_object_or_404(Comic, slug=kwargs['comic_slug'])
-        if request.user != self.comic.author:
-            raise PermissionDenied
-        return super().dispatch(request, *args, **kwargs)
+        if request.user.is_superuser or request.user == self.comic.author:
+            return super().dispatch(request, *args, **kwargs)
+        raise PermissionDenied
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -151,3 +159,16 @@ class ChapterCreateView(SuccessMessageMixin, CreateView):
 
     def get_success_url(self):
         return reverse('comic_detail', args=[self.comic.slug])
+
+
+class ChapterDetailView(CustomDetailView):
+    model = ComicChapter
+    template_name = 'chapter/detail.html'
+    context_object_name = 'chapter'
+
+    def dispatch(self, request, *args, **kwargs):
+        get_object_or_404(Comic, slug=kwargs['comic_slug'])
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(ComicChapter, slug=self.kwargs['chapter_slug'])
