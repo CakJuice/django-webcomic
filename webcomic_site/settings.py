@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'webcomic_site.base',
     'webcomic_site.comic',
+    'webcomic_site.ajax',
 ]
 
 MIDDLEWARE = [
@@ -65,7 +66,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'webcomic_site.comic.context_processors.genre',
+                # 'webcomic_site.comic.context_processors.genre',
             ],
         },
     },

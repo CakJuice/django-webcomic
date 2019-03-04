@@ -20,6 +20,7 @@ from django.urls import path, include
 
 from webcomic_site.base import views as base_views
 from webcomic_site.comic import views as comic_views
+from webcomic_site.ajax import views as ajax_views
 
 urlpatterns = [
     # base routes
@@ -52,6 +53,9 @@ urlpatterns = [
 
     # admin routes
     path('admin/', admin.site.urls),
+
+    # ajax routes
+    path('ajax/', include('webcomic_site.ajax.urls')),
 
     # genre routes
     path('genre/<slug:slug>/', comic_views.GenreDetailView.as_view(), name='genre_detail'),
