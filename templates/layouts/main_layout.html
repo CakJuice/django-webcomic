@@ -17,7 +17,7 @@
   var url = "{% url 'genre_ajax' %}";
   var genreContainer = document.getElementById('navGenre');
   $.get(url, function(response) {
-    if (response.status_code == 200 && response.success) {
+    if (response.success) {
       for (var i=0; i<response.genres.length; i++) {
         var genre = response.genres[i];
         var genreElem = getGenreDropdown(genre.name, genre.url);

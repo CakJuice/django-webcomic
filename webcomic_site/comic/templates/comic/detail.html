@@ -34,5 +34,13 @@
         <a href="{% url 'chapter_detail' comic_slug=comic.slug chapter_slug=chapter.slug %}">{{ chapter.title }}</a>
       </h3>
     {% endfor %}
+
+    {% if chapters.has_previous or chapters.has_next %}
+      <div class="row my-3">
+        <div class="col col-12">
+          {% include 'includes/pagination.html' with objects=chapters pagination=pagination only %}
+        </div>
+      </div>
+    {% endif %}
   </div>
 {% endblock %}

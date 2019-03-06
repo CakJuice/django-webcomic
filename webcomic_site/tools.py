@@ -32,12 +32,12 @@ def get_unique_model_slug(model, value):
     return slug
 
 
-def range_pagination(current_page=1, num_pages=5, limit=10):
-    """To convert number to list of number with range, used for iteration in template
+def get_pagination(current_page, num_pages, limit=10):
+    """To get pagination number.
     :param current_page: position of current page
     :param num_pages: count of total pagination page
     :param limit: length of pagination page
-    :return:
+    :return: Tuple of start & end value of pagination
     """
     start_index = current_page - ceil(limit / 2) + 1
     diff_start = 0
@@ -52,5 +52,30 @@ def range_pagination(current_page=1, num_pages=5, limit=10):
 
     start = int(start_index) if start_index >= 1 else 1
     end = int(end_index)
-    result = range(start, end + 1)
-    return result
+    return start, end
+
+
+def range_pagination(current_page, num_pages, limit=10):
+    """To get pagination range number, used for iteration in template.
+    :param current_page: position of current page
+    :param num_pages: count of total pagination page
+    :param limit: length of pagination page
+    :return: Range of start & end value of pagination
+    """
+    start, end = get_pagination(current_page, num_pages, limit)
+    return range(start, end + 1)
+
+
+def dict_pagination(current_page, num_pages, limit=10):
+    """To get pagination dictionary number, used for JSON data.
+    :param current_page: position of current page
+    :param num_pages: count of total pagination page
+    :param limit: length of pagination page
+    :return: Range of start & end value of pagination
+    """
+    start, end = get_pagination(current_page, num_pages, limit)
+    return {
+        'start': start,
+        'current': current_page,
+        'end': end,
+    }
