@@ -40,12 +40,30 @@
           integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
           integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- end of production head -->
   <!-- Development -->
   <!--<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>-->
   <!--<script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>-->
   <!--<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>-->
   <!-- end of development head -->
+  <script type="text/javascript" src="{% static 'js/app.js' %}"></script>
+  <script type="text/javascript">
+    var url = "{% url 'genre_ajax' %}";
+    var genreContainer = document.getElementById('navGenre');
+    $.get(url, function(response) {
+      if (response.success) {
+        for (var i=0; i<response.genres.length; i++) {
+          var genre = response.genres[i];
+          var genreElem = getGenreDropdown(genre.name, genre.url);
+          navGenre.innerHTML += genreElem;
+        }
+      }
+    });
+  </script>
   {% block extra_script %}{% endblock %}
 </body>
 </html>

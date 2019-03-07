@@ -1,11 +1,12 @@
 {% extends 'layouts/main_layout.html' %}
+{% load static %}
 
 {% block meta_description %}{{ comic.description }}{% endblock %}
 {% block meta_keywords %}Read, Comic, Free, {{ comic.genre.name }}{% endblock %}
 {% block title %}{{ comic.title }}{% endblock %}
 
 {% block content %}
-  <div class="container my-3">
+  <div id="main-content" class="container my-3">
     {% if messages %}
       {% include 'includes/alert_message.html' %}
     {% endif %}
@@ -28,19 +29,25 @@
         <a role="button" href="{% url 'comic_state' slug=comic.slug state=0 %}" class="btn btn-secondary">Set to Draft</a>
       {% endif %}
     {% endif %}
-
-    {% for chapter in chapters %}
-      <h3>
-        <a href="{% url 'chapter_detail' comic_slug=comic.slug chapter_slug=chapter.slug %}">{{ chapter.title }}</a>
-      </h3>
-    {% endfor %}
-
-    {% if chapters.has_previous or chapters.has_next %}
-      <div class="row my-3">
-        <div class="col col-12">
-          {% include 'includes/pagination.html' with objects=chapters pagination=pagination only %}
-        </div>
-      </div>
-    {% endif %}
   </div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/babel" src="{% static 'js/react-pagination.js' %}"></script>
+<script type="text/babel">
+  const mainContent = document.getElementById('main-content');
+  const url = "{% url 'comic_chapter_ajax' comic_slug=comic.slug %}?page=" + {{ request.GET.page }};
+
+  axios.get(url).then((response) => {
+    const data = response.data;
+    if (data.success) {
+      if (data.pagination.has_prev || data.pagination.has_next) {
+        mainContent.innerHTML += '<div id="pagination-container"></div>';
+        const paginationContainer = document.getElementById('pagination-container');
+        ReactDOM.render(<Pagination pagination={data.pagination}/>, paginationContainer);
+      }
+    }
+  });
+
+</script>
 {% endblock %}

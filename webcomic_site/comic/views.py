@@ -74,10 +74,10 @@ class ComicDetailView(CustomDetailView):
     template_name = 'comic/detail.html'
     context_object_name = 'comic'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['chapters'] = self.object.chapters.all()
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['chapters'] = self.object.chapters.all()
+    #     return context
 
 
 class ComicUpdateView(SuccessMessageMixin, UpdateView):

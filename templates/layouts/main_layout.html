@@ -7,23 +7,3 @@
 {% block footer %}
   {% include 'layouts/footer.html' %}
 {% endblock %}
-
-{% block extra_script %}
-<script type="text/javascript">
-  function getGenreDropdown(name, url) {
-    return '<a class="dropdown-item" href="' + url + '">' + name + '</a>';
-  }
-
-  var url = "{% url 'genre_ajax' %}";
-  var genreContainer = document.getElementById('navGenre');
-  $.get(url, function(response) {
-    if (response.success) {
-      for (var i=0; i<response.genres.length; i++) {
-        var genre = response.genres[i];
-        var genreElem = getGenreDropdown(genre.name, genre.url);
-        navGenre.innerHTML += genreElem;
-      }
-    }
-  });
-</script>
-{% endblock %}
