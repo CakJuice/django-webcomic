@@ -28,17 +28,13 @@ class Pagination extends React.Component {
     }
 
     this.state = {
-      start: props.pagination.start,
       current: props.pagination.current,
-      end: props.pagination.end,
       listPages: listPages,
       numPages: props.pagination.num_pages,
       hasPrev: props.pagination.has_prev,
       hasNext: props.pagination.has_next,
     }
   }
-
-
 
   render() {
     const pageItems = this.state.listPages.map((pageNum) =>
