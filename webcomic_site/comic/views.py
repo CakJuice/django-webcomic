@@ -4,14 +4,16 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import PermissionDenied
+from django.core.paginator import Paginator
 from django.http import Http404
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 
 from .models import Genre, Comic, ComicChapter
+from webcomic_site.tools import range_pagination
 
 
 # Create your views here.
@@ -74,10 +76,29 @@ class ComicDetailView(CustomDetailView):
     template_name = 'comic/detail.html'
     context_object_name = 'comic'
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['chapters'] = self.object.chapters.all()
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['chapters'] = self.object.chapters.all()
+        return context
+
+
+def comic_detail(request, slug):
+    comic = get_object_or_404(Comic, slug=slug)
+
+    chapter_list = comic.chapters.all().order_by('-sequence')
+    max_len = 10
+    paginator = Paginator(chapter_list, max_len)
+
+    page = int(request.GET.get('page', 1))
+    chapters = paginator.get_page(page)
+    pagination = range_pagination(page, chapters.paginator.num_pages)
+
+    context = {
+        'comic': comic,
+        'chapters': chapters,
+        'pagination': pagination,
+    }
+    return render(request, 'comic/detail.html', context=context)
 
 
 class ComicUpdateView(SuccessMessageMixin, UpdateView):

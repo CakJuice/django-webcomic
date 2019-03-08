@@ -13,7 +13,15 @@
   <div class="form-group">
     {{ field.label_tag }}
 
-    {% render_field field class=field|input_class %}
+    {% if field.field.widget.input_type == 'file' %}
+      <div class="custom-file">
+        {% render_field field class=field|input_class %}
+        <label class="custom-file-label" for="{{ field.auto_id }}">Choose file</label>
+      </div>
+    {% else %}
+      {% render_field field class=field|input_class %}
+    {% endif %}
+
     {% if form.is_bound %}
       {% if field.errors %}
         {% for error in field.errors %}

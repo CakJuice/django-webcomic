@@ -10,10 +10,15 @@ def field_type(bound_field):
 
 @register.filter
 def input_class(bound_field):
-    css_class = ''
+    css_state = ''
+    if field_type(bound_field) == 'ClearableFileInput':
+        css_form = 'custom-file-input'
+    else:
+        css_form = 'form-control'
+
     if bound_field.form.is_bound:
         if bound_field.errors:
-            css_class = 'is-invalid'
+            css_state = 'is-invalid'
         elif field_type(bound_field) != 'PasswordInput':
-            css_class = 'is-valid'
-    return 'form-control %s' % (css_class,)
+            css_state = 'is-valid'
+    return '%s %s' % (css_form, css_state,)
