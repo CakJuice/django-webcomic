@@ -202,7 +202,7 @@ class ChapterDetailView(CustomDetailView):
 class ChapterUpdateView(SuccessMessageMixin, UpdateView):
     model = ComicChapter
     template_name = 'chapter/update.html'
-    fields = ['title', 'thumbnail']
+    fields = ['title', 'thumbnail', 'sequence']
     context_object_name = 'chapter'
     success_message = 'Success! Comic has been updated.'
     last_thumbnail = None
