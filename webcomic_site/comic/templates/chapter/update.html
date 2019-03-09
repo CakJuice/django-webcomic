@@ -1,7 +1,7 @@
 {% extends 'layouts/main_layout.html' %}
 
 {% block extra_meta %}<meta name="robots" content="noindex,nofollow">{% endblock %}
-{% block title %}{{ comic.title }}{% endblock %}
+{% block title %}{{ chapter.title }}{% endblock %}
 
 {% block content %}
   <div class="container my-3">
@@ -10,7 +10,8 @@
       {% csrf_token %}
       {% include 'includes/form.html' %}
       <button type="submit" class="btn btn-success">Update</button>
-      <a role="button" class="btn btn-secondary" href="{% url 'comic_detail' slug=comic.slug %}">Cancel</a>
+      <a role="button" class="btn btn-secondary"
+         href="{% url 'chapter_detail' comic_slug=chapter.comic.slug chapter_slug=chapter.slug %}">Cancel</a>
     </form>
   </div>
 {% endblock %}

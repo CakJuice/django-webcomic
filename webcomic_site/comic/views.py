@@ -105,19 +105,20 @@ class ComicUpdateView(SuccessMessageMixin, UpdateView):
     model = Comic
     template_name = 'comic/update.html'
     fields = ['title', 'description', 'genre', 'thumbnail', 'banner', 'state']
+    context_object_name = 'comic'
     success_message = 'Success! Comic has been updated.'
     last_thumbnail = None
     last_banner = None
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        # If request user isn't author, set to 403.
+        # If request user isn't superuser or author, set to 403.
         obj = self.get_object()
-        if request.user != obj.author:
-            raise PermissionDenied
-        self.last_thumbnail = obj.thumbnail
-        self.last_banner = obj.banner
-        return super().dispatch(request, *args, **kwargs)
+        if request.user.is_superuser or request.user == obj.author:
+            self.last_thumbnail = obj.thumbnail
+            self.last_banner = obj.banner
+            return super().dispatch(request, *args, **kwargs)
+        raise PermissionDenied
 
     def get_success_url(self):
         return reverse('comic_detail', args=[self.object.slug])
@@ -145,20 +146,18 @@ def action_state(request, slug, state):
     :return: If success redirect to comic detail page. Otherwise to 404 or 403.
     """
     comic = get_object_or_404(Comic, slug=slug)
-    if request.user != comic.author:
-        raise PermissionDenied
-
-    comic_state = [cs[0] for cs in comic.STATE]
-    state = int(state)
-    if state in comic_state:
-        comic.set_state(state)
-
-    return redirect('comic_detail', slug=slug)
+    if request.user.is_superuser or request.user == comic.author:
+        comic_state = [cs[0] for cs in comic.STATE]
+        state = int(state)
+        if state in comic_state:
+            comic.set_state(state)
+        return redirect('comic_detail', slug=slug)
+    raise PermissionDenied
 
 
 class ChapterCreateView(SuccessMessageMixin, CreateView):
     model = ComicChapter
-    fields = ['title', 'thumbnail']
+    fields = ['title', 'thumbnail', 'sequence']
     template_name = 'chapter/create.html'
     success_message = 'Congratulation! You have created a new chapter.'
 
@@ -168,6 +167,11 @@ class ChapterCreateView(SuccessMessageMixin, CreateView):
         if request.user.is_superuser or request.user == self.comic.author:
             return super().dispatch(request, *args, **kwargs)
         raise PermissionDenied
+
+    def get_initial(self):
+        chapters = ComicChapter.objects.filter(comic=self.comic).order_by('-sequence')[:1]
+        last_sequence = chapters[0].sequence
+        return {'sequence': last_sequence + 1}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -193,3 +197,35 @@ class ChapterDetailView(CustomDetailView):
 
     def get_object(self, queryset=None):
         return get_object_or_404(ComicChapter, slug=self.kwargs['chapter_slug'])
+
+
+class ChapterUpdateView(SuccessMessageMixin, UpdateView):
+    model = ComicChapter
+    template_name = 'chapter/update.html'
+    fields = ['title', 'thumbnail']
+    context_object_name = 'chapter'
+    success_message = 'Success! Comic has been updated.'
+    last_thumbnail = None
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        # If request user isn't superuser or author, set to 403.
+        obj = self.get_object()
+        if request.user.is_superuser or request.user == self.comic.author:
+            self.last_thumbnail = obj.thumbnail
+            return super().dispatch(request, *args, **kwargs)
+        raise PermissionDenied
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(ComicChapter, slug=self.kwargs['chapter_slug'])
+
+    def form_valid(self, form):
+        if self.last_thumbnail:
+            new_thumbnail = form.cleaned_data.get('thumbnail')
+            if self.last_thumbnail != new_thumbnail:
+                os.remove(os.path.join(settings.MEDIA_ROOT, self.last_thumbnail.path))
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('chapter_detail', args=[self.object.comic.slug, self.object.slug])
