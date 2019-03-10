@@ -137,3 +137,25 @@ class ComicChapter(models.Model):
     def add_reader(self):
         self.read += 1
         self.save()
+
+
+def upload_chapter_image(instance, filename):
+    path = get_upload_chapter_path(instance.chapter)
+    ext = filename.split('.')[-1]
+    new_name = '%s.%s' % (uuid4().hex, ext)
+    return os.path.join(path, new_name)
+
+
+class ChapterImage(models.Model):
+    image = models.ImageField(upload_to=upload_chapter_image, verbose_name="Image", null=True, blank=True)
+    sequence = models.IntegerField(verbose_name="Sequence", default=1)
+    chapter = models.ForeignKey(ComicChapter, on_delete=models.CASCADE, related_name='images', verbose_name="Chapter")
+    upload_at = models.DateTimeField(auto_now_add=True, verbose_name="Upload At")
+
+    class Meta:
+        ordering = ['sequence']
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.chapter.updated_at = timezone.now()
+        self.chapter.save()
