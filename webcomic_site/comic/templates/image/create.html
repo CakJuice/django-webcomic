@@ -1,12 +1,12 @@
 {% extends 'layouts/main_layout.html' %}
 
-{% block meta_description %}Create your new comic chapter{% endblock %}
-{% block meta_keywords %}Comic, Create, Chapter{% endblock %}
-{% block title %}Create New Chapter{% endblock %}
+{% block meta_description %}Add image for your comic chapter{% endblock %}
+{% block meta_keywords %}Comic, Create, Chapter, Image{% endblock %}
+{% block title %}Add New Image{% endblock %}
 
 {% block content %}
   <div class="container my-3">
-    <h3>Create New Chapter</h3>
+    <h3>Add New Image</h3>
     <form method="POST" enctype="multipart/form-data" novalidate>
       {% csrf_token %}
       {% include 'includes/form.html' %}

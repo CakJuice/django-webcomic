@@ -12,7 +12,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 
-from .models import Genre, Comic, ComicChapter
+from .models import Genre, Comic, ComicChapter, ChapterImage
 from webcomic_site.tools import range_pagination
 
 
@@ -170,8 +170,10 @@ class ChapterCreateView(SuccessMessageMixin, CreateView):
 
     def get_initial(self):
         chapters = ComicChapter.objects.filter(comic=self.comic).order_by('-sequence')[:1]
-        last_sequence = chapters[0].sequence
-        return {'sequence': last_sequence + 1}
+        sequence = 1
+        if chapters.count() > 0:
+            sequence = chapters[0].sequence + 1
+        return {'sequence': sequence}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -204,7 +206,7 @@ class ChapterUpdateView(SuccessMessageMixin, UpdateView):
     template_name = 'chapter/update.html'
     fields = ['title', 'thumbnail', 'sequence']
     context_object_name = 'chapter'
-    success_message = 'Success! Comic has been updated.'
+    success_message = 'Success! Chapter has been updated.'
     last_thumbnail = None
 
     @method_decorator(login_required)
@@ -229,3 +231,38 @@ class ChapterUpdateView(SuccessMessageMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('chapter_detail', args=[self.object.comic.slug, self.object.slug])
+
+
+class ChapterImageCreateView(SuccessMessageMixin, CreateView):
+    model = ChapterImage
+    template_name = 'image/create.html'
+    fields = ['image', 'sequence']
+    success_message = 'Success! You have added a new image for this chapter.'
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        self.comic = get_object_or_404(Comic, slug=kwargs['comic_slug'])
+        self.chapter = get_object_or_404(ComicChapter, slug=kwargs['chapter_slug'])
+        if request.user.is_superuser or request.user == self.comic.author:
+            return super().dispatch(request, *args, **kwargs)
+        raise PermissionDenied
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comic_slug'] = self.comic.slug
+        context['chapter_slug'] = self.chapter.slug
+        return context
+
+    def get_initial(self):
+        images = ChapterImage.objects.filter(chapter=self.chapter).order_by('-sequence')[:1]
+        sequence = 1
+        if images.count() > 0:
+            sequence = images[0].sequence + 1
+        return {'sequence': sequence}
+
+    def form_valid(self, form):
+        form.instance.chapter = self.chapter
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('chapter_detail', args=[self.comic.slug, self.chapter.slug])
