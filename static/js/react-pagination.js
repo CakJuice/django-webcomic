@@ -52,7 +52,7 @@ class Pagination extends React.Component {
           {pageItems}
 
           {this.state.hasNext && (
-            <PageItem url={'?page=' + this.state.end} text="&raquo;"/>
+            <PageItem url={'?page=' + this.state.numPages} text="&raquo;"/>
           )}
         </ul>
       </nav>
