@@ -85,18 +85,18 @@ class ComicDetailView(CustomDetailView):
 def comic_detail(request, slug):
     comic = get_object_or_404(Comic, slug=slug)
 
-    chapter_list = comic.chapters.all().order_by('-sequence')
-    max_len = 10
-    paginator = Paginator(chapter_list, max_len)
-
-    page = int(request.GET.get('page', 1))
-    chapters = paginator.get_page(page)
-    pagination = range_pagination(page, chapters.paginator.num_pages)
+    # chapter_list = comic.chapters.all().order_by('-sequence')
+    # max_len = 10
+    # paginator = Paginator(chapter_list, max_len)
+    #
+    # page = int(request.GET.get('page', 1))
+    # chapters = paginator.get_page(page)
+    # pagination = range_pagination(page, chapters.paginator.num_pages)
 
     context = {
         'comic': comic,
-        'chapters': chapters,
-        'pagination': pagination,
+        # 'chapters': chapters,
+        # 'pagination': pagination,
     }
     return render(request, 'comic/detail.html', context=context)
 

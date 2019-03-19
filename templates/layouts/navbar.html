@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-sm navbar-light">
+<nav class="navbar navbar-expand-sm navbar-light" id="navbar">
   <div class="container">
     <a class="navbar-brand" href="{% url 'homepage' %}">Webcomic <span class="sr-only">(current)</span></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
@@ -12,9 +12,9 @@
           <a class="nav-link dropdown-toggle" id="genreNavbarDropdown" role="button" href="#" data-toggle="dropdown"
              aria-haspopup="true" aria-expanded="false">Genre</a>
           <div class="dropdown-menu" id="navGenre" aria-labelledby="genreDropdown">
-            {% for genre in comic_genre %}
-              <a class="dropdown-item" href="{% url 'genre_detail' slug=genre.slug %}">{{ genre.name }}</a>
-            {% endfor %}
+              {% for genre in comic_genre %}
+                <a class="dropdown-item" href="{% url 'genre_detail' slug=genre.slug %}">{{ genre.name }}</a>
+              {% endfor %}
           </div>
         </li>
       </ul>

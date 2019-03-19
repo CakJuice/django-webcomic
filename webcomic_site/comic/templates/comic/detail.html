@@ -29,31 +29,18 @@
         <a role="button" href="{% url 'comic_state' slug=comic.slug state=0 %}" class="btn btn-secondary">Set to Draft</a>
       {% endif %}
     {% endif %}
-
-    <div>
-      {% for chapter in chapters %}
-        <h3><a href="{% url 'chapter_detail' comic_slug=comic.slug chapter_slug=chapter.slug %}">{{ chapter.title }}</a></h3>
-      {% empty %}
-        <h3>Sorry, there are no chapters for this comic.</h3>
-      {% endfor %}
-    </div>
-
-    <div>
-      {% include 'includes/pagination.html' with objects=chapters pagination=pagination only %}
-    </div>
   </div>
 {% endblock %}
 
 {% block extra_script %}
-<!--<script type="text/babel" src="{# % static 'js/react-chapter-list.js' % #}"></script>-->
-<!--<script type="text/babel" src="{# % static 'js/react-pagination.js' % #}"></script>-->
+<script type="text/babel" src="{% static 'js/react-chapter-list.js' %}"></script>
+<script type="text/babel" src="{% static 'js/react-pagination.js' %}"></script>
 <script type="text/babel">
-  /*
   const mainContent = document.getElementById('main-content');
-  let url = "{# % url 'comic_chapter_ajax' comic_slug=comic.slug % #}";
+  let url = "{% url 'comic_chapter_ajax' comic_slug=comic.slug %}";
 
   {% if request.GET and request.GET.page %}
-    url += '?page=' + {{ request.GET.page }}
+    url += '?page=' + {{ request.GET.page }};
   {% endif %}
 
   axios.get(url).then((response) => {
@@ -72,6 +59,5 @@
       }
     }
   });
-  */
 </script>
 {% endblock %}

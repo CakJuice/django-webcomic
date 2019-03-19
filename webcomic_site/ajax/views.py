@@ -29,7 +29,7 @@ def comic_chapter_ajax(request, comic_slug):
 
     chapter_list = comic.chapters.values('title', 'slug', 'thumbnail', 'state', 'publish_date', 'read',
                                          'sequence').order_by('-sequence')
-    obj_len = 10
+    obj_len = 1
     paginator = Paginator(chapter_list, obj_len)
     page = request.GET.get('page', '1')
 
