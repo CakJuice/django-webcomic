@@ -1,3 +1,37 @@
+const html = document.getElementsByTagName('html')[0];
+
+html.addEventListener('click', function(e) {
+  /* Event listener handler for html element.
+  * This code will be executed when user clicked on all html area.
+  */
+
+  if (e.target.className === 'nav-link dropdown-toggle') {
+    // Check whether element is 'nav-link dropdown toggle'.
+    // Set nextElementSibling to toggling 'show' class name.
+    const sibling = e.target.nextElementSibling;
+    sibling.classList.toggle('show');
+  } else {
+    // hide all shown navbar dropdown
+    hideNavDropdown();
+  }
+});
+
+function hideNavDropdown() {
+  /* To hide all shown navbar dropdown.
+  */
+
+  const navDropdowns = document.getElementsByClassName('nav-link dropdown-toggle');
+
+  for (let i=0;i<navDropdowns.length;i++) {
+    const dropdown = navDropdowns[i];
+    const sibling = dropdown.nextElementSibling;
+    if (sibling.classList.contains('show')) {
+      sibling.classList.remove('show');
+    }
+  }
+}
+
+/*
 function getGenreDropdown(name, url) {
   return '<a class="dropdown-item" href="' + url + '">' + name + '</a>';
 }
@@ -17,6 +51,7 @@ function getPaginationPage(pagination, url, text) {
     '<a class="page-link" href="' + url + '">' + text + '</a>' +
   '</li>';
 }
+*/
 
 /*
 function getPagination(pagination) {
