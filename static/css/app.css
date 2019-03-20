@@ -1,0 +1,79 @@
+.navbar {
+  /* font-weight: 600; */
+  background-color: #fff;
+  border-bottom: 1px solid #c30f42;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: rgba(0,0,0,.8);
+}
+
+.footer {
+  background-color: #fff;
+  border-top: 1px solid #c30f42;
+}
+
+.author-link,
+.footer-social-link {
+  color: rgba(195,15,66,.7);
+}
+
+.author-link:hover,
+.author-link:focus,
+.footer-social-link:hover,
+.footer-social-link:focus {
+  color: rgba(195,15,66,1);
+}
+
+.comic-list,
+.comic-detail-banner,
+.comic-detail-thumbnail {
+  position: relative;
+}
+
+/*
+.comic-detail-title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    font-weight: 600;
+    width: 50%;
+    background-color: rgba(255,255,255,.7);
+    border-radius: 5px;
+}
+*/
+
+.comic-info,
+.comic-edit-banner,
+.comic-edit-thumbnail {
+  position: absolute;
+  top: 95%;
+  transform: translate(0,-100%);
+}
+
+.comic-edit-banner {
+  left: 15%;
+}
+
+.comic-edit-thumbnail {
+  left: 5%;
+}
+
+.chapter-title {
+  color: rgba(195,15,66,1);
+}
+
+.navbar-comic-view {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.navbar-dark .navbar-text {
+  color: rgba(255,255,255,.8);
+}
+
+.comic-like {
+  font-size: 18px;
+  color: rgba(195,15,66,1);
+}

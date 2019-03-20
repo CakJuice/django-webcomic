@@ -6,6 +6,14 @@
 {% block title %}{{ comic.title }}{% endblock %}
 
 {% block content %}
+  <div class="comic-detail-banner d-none d-md-block">
+    {% if comic.banner %}
+      <img src="{{ MEDIA_URL }}{{ comic.banner }}" class="img-fluid" id="img-banner">
+    {% else %}
+      <img src="{{ MEDIA_URL }}images/default-banner.png" class="img-fluid" id="img-banner">
+    {% endif %}
+  </div>
+
   <div id="main-content" class="container my-3">
     {% if messages %}
       {% include 'includes/alert_message.html' %}
