@@ -8,26 +8,51 @@ html.addEventListener('click', function(e) {
   if (e.target.className === 'nav-link dropdown-toggle') {
     // Check whether element is 'nav-link dropdown toggle'.
     // Set nextElementSibling to toggling 'show' class name.
-    const sibling = e.target.nextElementSibling;
-    sibling.classList.toggle('show');
+    showNavDropdown(e);
   } else {
     // hide all shown navbar dropdown
-    hideNavDropdown();
+    hideNavDropdown(e);
   }
 });
 
-function hideNavDropdown() {
-  /* To hide all shown navbar dropdown.
+function hideDropdown(dropdown) {
+  /* Hide dropdown of nav-link.
+  * params dropdown: element of nav-link dropdown.
+  */
+
+  const sibling = dropdown.nextElementSibling;
+  if (sibling.classList.contains('show')) {
+    sibling.classList.remove('show');
+  }
+}
+
+function showNavDropdown(e) {
+  /* Show dropdown of navbar when clicked.
+  * Need to hide all shown navbar dropdowns of navbar
   */
 
   const navDropdowns = document.getElementsByClassName('nav-link dropdown-toggle');
-
   for (let i=0;i<navDropdowns.length;i++) {
     const dropdown = navDropdowns[i];
-    const sibling = dropdown.nextElementSibling;
-    if (sibling.classList.contains('show')) {
-      sibling.classList.remove('show');
+    if (dropdown == e.target) {
+      continue;
     }
+
+    hideDropdown(dropdown);
+  }
+
+  const sibling = e.target.nextElementSibling;
+  sibling.classList.toggle('show');
+}
+
+function hideNavDropdown(e) {
+  /* To hide all shown navbar dropdowns.
+  */
+
+  const navDropdowns = document.getElementsByClassName('nav-link dropdown-toggle');
+  for (let i=0;i<navDropdowns.length;i++) {
+    const dropdown = navDropdowns[i];
+    hideDropdown(dropdown);
   }
 }
 
