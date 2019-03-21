@@ -8,9 +8,9 @@
 {% block content %}
   <div class="comic-detail-banner d-none d-md-block">
     {% if comic.banner %}
-      <img src="{{ MEDIA_URL }}{{ comic.banner }}" class="img-fluid" id="img-banner">
+      <img src="{{ comic.banner.url }}" class="img-fluid" id="img-banner">
     {% else %}
-      <img src="{{ MEDIA_URL }}images/default-banner.png" class="img-fluid" id="img-banner">
+      <img src="{{ DEFAULT_BANNER }}" class="img-fluid" id="img-banner">
     {% endif %}
   </div>
 
@@ -41,9 +41,16 @@
 {% endblock %}
 
 {% block extra_script %}
-<script type="text/babel" src="{% static 'js/react-chapter-list.js' %}"></script>
-<script type="text/babel" src="{% static 'js/react-pagination.js' %}"></script>
+<!--<script type="text/babel" src="{# % static 'js/react-chapter-list.js' % #}"></script>-->
+<!--<script type="text/babel" src="{# % static 'js/react-pagination.js' % #}"></script>-->
+<script type="text/javascript">
+  const url = "{% url 'comic_chapter_ajax' comic_slug=comic.slug %}";
+  $.get(url, function(response) {
+    console.log(response);
+  });
+</script>
 <script type="text/babel">
+  /*
   const mainContent = document.getElementById('main-content');
   let url = "{% url 'comic_chapter_ajax' comic_slug=comic.slug %}";
 
@@ -67,5 +74,6 @@
       }
     }
   });
+  */
 </script>
 {% endblock %}

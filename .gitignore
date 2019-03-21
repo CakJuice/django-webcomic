@@ -107,4 +107,6 @@ venv.bak/
 .idea
 .vscode
 
-media/
+# media file
+mail_attachment/
+uploads/

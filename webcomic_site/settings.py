@@ -64,9 +64,10 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
-                'django.template.context_processors.media',
+                # 'django.template.context_processors.media',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'webcomic_site.context_processors.default',
                 'webcomic_site.comic.context_processors.genre',
             ],
         },
