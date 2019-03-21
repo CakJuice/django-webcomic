@@ -52,7 +52,11 @@
   <!--<script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>-->
   <!--<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>-->
   <!-- end of development head -->
-  <!--<script type="text/babel" src="{# % static 'js/app.js' % #}"></script>-->
+  <script type="text/javascript">
+    var DEFAULT_BANNER = "{{ DEFAULT_BANNER }}";
+    var DEFAULT_THUMBNAIL = "{{ DEFAULT_THUMBNAIL }}";
+  </script>
+  <script type="text/javascript" src="{% static 'js/app.js' %}"></script>
   <!--<script type="text/babel" src="{# % static 'js/react-navbar.js' % #}"></script>-->
   <script type="text/babel">
     /*
