@@ -8,9 +8,9 @@
 {% block content %}
   <div class="comic-detail-banner d-none d-md-block">
     {% if comic.banner %}
-      <img src="{{ comic.banner.url }}" class="img-fluid" id="img-banner">
+      <img src="{{ comic.banner.url }}" class="img-fluid">
     {% else %}
-      <img src="{{ DEFAULT_BANNER }}" class="img-fluid" id="img-banner">
+      <img src="{{ DEFAULT_BANNER }}" class="img-fluid">
     {% endif %}
   </div>
 
@@ -19,40 +19,37 @@
       {% include 'includes/alert_message.html' %}
     {% endif %}
 
-    <h3>{{ comic.title }}</h3>
-    <p>
-      Genre: <a href="{% url 'genre_detail' slug=comic.genre.slug %}">{{ comic.genre.name }}</a>
-      - {{ comic.get_state_display }}
-    </p>
-
-    {% if user.is_authenticated and user == comic.author %}
-      <a role="button" href="{% url 'comic_update' slug=comic.slug %}" class="btn btn-primary">Edit</a>
-      {% if comic.state == 0 %}
-        <a role="button" href="{% url 'comic_state' slug=comic.slug state=1 %}" class="btn btn-success">Publish</a>
-      {% elif comic.state == 1 %}
-        <a role="button" href="{% url 'comic_state' slug=comic.slug state=9 %}" class="btn btn-secondary">Archive</a>
-      {% else %}
-        <a role="button" href="{% url 'comic_state' slug=comic.slug state=0 %}" class="btn btn-secondary">Set to Draft</a>
-      {% endif %}
-    {% endif %}
-
-    <div class="row" id="sub-content-1">
-      <div class="col col-md-9 col-12" id="chapter-container"></div>
+    <div class="row">
+      <div class="col col-md-9 col-12">
+        <h3>{{ comic.title }}</h3>
+        <p>
+          Genre: <a href="{% url 'genre_detail' slug=comic.genre.slug %}">{{ comic.genre.name }}</a>
+          - {{ comic.get_state_display }}
+        </p>
+        <div>
+          <div class="mt-2" id="chapter-container"></div>
+        </div>
+      </div>
       <div class="col col-md-3 col-12">
         <div>
           <div class="mt-2">
+            {% if user.is_authenticated and user == comic.author %}
+              <a role="button" href="{% url 'comic_update' slug=comic.slug %}" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Edit
+              </a>
+              {% if comic.state == 0 %}
+                <a role="button" href="{% url 'comic_state' slug=comic.slug state=1 %}" class="btn btn-success">Publish</a>
+              {% elif comic.state == 1 %}
+                <a role="button" href="{% url 'comic_state' slug=comic.slug state=9 %}" class="btn btn-secondary">Archive</a>
+              {% else %}
+                <a role="button" href="{% url 'comic_state' slug=comic.slug state=0 %}" class="btn btn-secondary">Set to Draft</a>
+              {% endif %}
+              <!--<button class="btn btn-success" id="btn-new-chapter" data-toggle="modal" data-target="#webcomic-modal">-->
+                <!--<i class="fas fa-plus-circle"></i> New Chapter-->
+              <!--</button>-->
+            {% endif %}
             <p>{{ comic.description }}</p>
           </div>
-          {% if user.is_authenticated and user == comic.author %}
-            <div class="mt-2">
-              <a class="btn btn-info" role="button" href="{% url 'comic_update' comic.slug %}">
-                <i class="fas fa-edit"></i> Update
-              </a>
-              <button class="btn btn-success" id="btn-new-chapter" data-toggle="modal" data-target="#webcomic-modal">
-                <i class="fas fa-plus-circle"></i> New Chapter
-              </button>
-            </div>
-          {% endif %}
         </div>
         <div class="comic-detail-thumbnail mt-2">
           {% if comic.thumbnail %}
@@ -60,15 +57,8 @@
           {% else %}
             <img src="{{ DEFAULT_THUMBNAIL }}" class="img-fluid">
           {% endif %}
-
-          {% if user.is_authenticated and user == comic.author %}
-            <div class="comic-edit-thumbnail">
-              <button class="btn btn-sm btn-outline-danger" id="btn-thumbnail" data-toggle="modal" data-target="#webcomic-modal">
-                <i class="fas fa-edit"></i> Edit
-              </button>
-            </div>
-          {% endif %}
         </div>
+      </div>
     </div>
   </div>
 {% endblock %}
