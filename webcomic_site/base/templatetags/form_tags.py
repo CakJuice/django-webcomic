@@ -12,13 +12,13 @@ def field_type(bound_field):
 def input_class(bound_field):
     css_state = ''
     if field_type(bound_field) == 'ClearableFileInput':
-        css_form = 'custom-file-input'
+        css_form = 'file-input'
     else:
-        css_form = 'form-control'
+        css_form = 'input'
 
     if bound_field.form.is_bound:
         if bound_field.errors:
-            css_state = 'is-invalid'
+            css_state = 'is-danger'
         elif field_type(bound_field) != 'PasswordInput':
-            css_state = 'is-valid'
+            css_state = 'is-success'
     return '%s %s' % (css_form, css_state,)

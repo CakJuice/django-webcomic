@@ -5,28 +5,28 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-  <div class="container my-3">
-    <div class="row justify-content-center">
-      <div class="col col-lg-4 col-md-6 col-8">
+  <section class="section container">
+    <div class="columns is-centered">
+      <div class="column is-one-third-desktop is-half-tablet">
         <div class="card">
-          <div class="card-body">
-            <h3 class="card-title">Login</h3>
+          <header class="card-header">
+            <p class="card-header-title">Login</p>
+          </header>
+          <div class="card-content">
             <form method="POST" novalidate>
               {% csrf_token %}
               {% include 'includes/form.html' %}
-              <button type="submit" class="btn btn-primary btn-block">Login</button>
+              <button type="submit" class="button is-primary">Login</button>
             </form>
           </div>
-          <div class="card-footer text-muted text-center">
-            Not registered yet? <a href="#">Sign up</a>
-          </div>
+          <footer class="card-footer has-text-grey text-center">
+            <p class="card-footer-item">Not registered yet?&nbsp;<a class="is-white" href="{% url 'signup' %}">Sign up</a></p>
+          </footer>
         </div>
-        <div class="text-center py-2">
-          <small>
-            <a href="#" class="text-muted">Forgot your password?</a>
-          </small>
+        <div class="has-text-centered py-2">
+          <a href="#" class="">Forgot your password?</a>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 {% endblock %}

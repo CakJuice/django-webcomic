@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/fontawesome.css"
         integrity="sha384-WK8BzK0mpgOdhCxq86nInFqSWLzR5UAsNg0MGX9aDaIIrFWQ38dGdhwnNCAoXFxL" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/bulma-app.css' %}">
   <!--<link rel="stylesheet" href="{# % static 'css/app.css' % #}">-->
   <!-- end of production head -->
   <!-- Development -->
@@ -26,7 +27,7 @@
   <!-- end of development head -->
   {% block extra_style %}{% endblock %}
 </head>
-<body class="bg-light">
+<body class="has-navbar-fixed-top">
   {% block navbar %}{% endblock %}
 
   {% block content %}{% endblock %}
