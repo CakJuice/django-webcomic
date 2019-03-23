@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_toolbar',
     'widget_tweaks',
+    'rest_framework',
     'webcomic_site.base',
     'webcomic_site.comic',
     'webcomic_site.ajax',

@@ -53,6 +53,10 @@ urlpatterns = [
     # admin routes
     path('admin/', admin.site.urls),
 
+    # api routes
+    path('api/', include('webcomic_site.rest.urls')),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
     # ajax routes
     path('ajax/', include('webcomic_site.ajax.urls')),
 
