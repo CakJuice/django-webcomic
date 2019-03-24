@@ -4,6 +4,7 @@ from rest_framework import routers
 from . import views
 
 router = routers.DefaultRouter()
+router.register(r'users', views.UserViewSet)
 router.register(r'genres', views.GenreViewSet)
 router.register(r'comics', views.ComicViewSet)
 # router.register(r'comics/update-state', views.UpdateComicState)
