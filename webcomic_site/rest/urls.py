@@ -5,7 +5,7 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'genres', views.GenreViewSet)
+router.register(r'comics', views.ComicViewSet)
+# router.register(r'comics/update-state', views.UpdateComicState)
 
-urlpatterns = [
-    path('', include(router.urls)),
-]
+urlpatterns = router.urls
