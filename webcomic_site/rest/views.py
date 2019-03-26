@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from webcomic_site.comic.models import Genre, Comic
-from . import serializers
+from . import serializers, permissions
 
 
 # Create your views here.
@@ -24,7 +24,7 @@ class ComicViewSet(viewsets.ModelViewSet):
     queryset = Comic.objects.all()
     serializer_class = serializers.ComicSerializer
     lookup_field = 'slug'
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (permissions.OnlyAuthorCanUpdatePermission,)
 
     # def get_permissions(self):
     #     if self.request.method != 'GET':
