@@ -17,6 +17,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 
 from webcomic_site.base import views as base_views
 from webcomic_site.comic import views as comic_views
@@ -56,6 +57,9 @@ urlpatterns = [
     # api routes
     path('api/', include('webcomic_site.rest.urls')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('api-token-auth/', obtain_jwt_token),
+    path('api-token-verify/', verify_jwt_token),
+    path('api-token-refresh/', refresh_jwt_token),
 
     # ajax routes
     path('ajax/', include('webcomic_site.ajax.urls')),
@@ -72,8 +76,10 @@ urlpatterns = [
 
     # chapter routes
     path('<slug:comic_slug>/chapter/create/', comic_views.ChapterCreateView.as_view(), name='chapter_create'),
-    path('<slug:comic_slug>/<slug:chapter_slug>/detail/', comic_views.ChapterDetailView.as_view(), name='chapter_detail'),
-    path('<slug:comic_slug>/<slug:chapter_slug>/update/', comic_views.ChapterUpdateView.as_view(), name='chapter_update'),
+    path('<slug:comic_slug>/<slug:chapter_slug>/detail/', comic_views.ChapterDetailView.as_view(),
+         name='chapter_detail'),
+    path('<slug:comic_slug>/<slug:chapter_slug>/update/', comic_views.ChapterUpdateView.as_view(),
+         name='chapter_update'),
     path('<slug:comic_slug>/<slug:chapter_slug>/add-image/', comic_views.ChapterImageCreateView.as_view(),
          name='chapter_add_image'),
 ]

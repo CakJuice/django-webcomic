@@ -7,7 +7,7 @@ from webcomic_site.comic.models import Genre, Comic
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'url']
+        fields = ('id', 'username', 'url',)
         extra_kwargs = {
             'url': {'lookup_field': 'username'}
         }
@@ -16,7 +16,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class GenreSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Genre
-        fields = ['name', 'slug', 'url']
+        fields = ('name', 'slug', 'url',)
         extra_kwargs = {
             'url': {'lookup_field': 'slug'}
         }
@@ -25,8 +25,8 @@ class GenreSerializer(serializers.HyperlinkedModelSerializer):
 class ComicSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Comic
-        fields = ['title', 'description', 'genre', 'author', 'slug', 'thumbnail', 'banner', 'state', 'publish_date',
-                  'url']
+        fields = ('title', 'description', 'genre', 'author', 'slug', 'thumbnail', 'banner', 'state', 'publish_date',
+                  'url',)
         extra_kwargs = {
             'url': {'lookup_field': 'slug'},
             'genre': {'lookup_field': 'slug'},
@@ -37,5 +37,5 @@ class ComicSerializer(serializers.HyperlinkedModelSerializer):
 class UpdateComicStateSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Comic
-        fields = ['state']
+        fields = ('state',)
         lookup_field = 'slug'

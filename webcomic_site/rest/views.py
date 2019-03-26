@@ -24,6 +24,12 @@ class ComicViewSet(viewsets.ModelViewSet):
     queryset = Comic.objects.all()
     serializer_class = serializers.ComicSerializer
     lookup_field = 'slug'
+    permission_classes = (IsAuthenticated,)
+
+    # def get_permissions(self):
+    #     if self.request.method != 'GET':
+    #         self.permission_classes = (IsAuthenticated,)
+    #     return super().get_permissions()
 
 
 class UpdateComicState(generics.UpdateAPIView):
