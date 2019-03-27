@@ -50,7 +50,13 @@ class GenreDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['comics'] = self.object.comics.filter(state=1)
+        comic_list = self.object.comics.filter(state=1).order_by('-publish_date')
+        paginator = Paginator(comic_list, 40)
+        page = int(self.request.GET.get('page', 1))
+        comics = paginator.get_page(page)
+        pagination = range_pagination(page, comics.paginator.num_pages)
+        context['comics'] = comics
+        context['pagination'] = pagination
         return context
 
 
