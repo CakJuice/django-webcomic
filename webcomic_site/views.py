@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.http import JsonResponse
 
 
@@ -25,3 +26,30 @@ class AjaxableResponseMixin:
             }
             return JsonResponse(data)
         return response
+
+
+class UserResponseMixin:
+    def dispatch(self, request, *args, **kwargs):
+        """Override function.
+        Handle detail view page.
+        Need to check is comic / chapter state = publish.
+        If comic / chapter not publish, then check whether the user is logged in.
+        If the user logged in then check whether the user is comic author or superuser.
+        If the user is the author then call super function.
+        Otherwise raise 404 page.
+        :param request: Page request.
+        :param args: Arguments.
+        :param kwargs: Keyword arguments.
+        :return: If allowed then call super function. Otherwise raise 404 page.
+        """
+        is_allowed = False
+        obj = self.get_object()
+        if request.user.is_authenticated:
+            if request.user.is_superuser or request.user == obj.author:
+                is_allowed = True
+        else:
+            if obj.state == 1:
+                is_allowed = True
+        if is_allowed:
+            return super().dispatch(request, *args, **kwargs)
+        raise Http404

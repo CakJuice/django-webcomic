@@ -5,44 +5,18 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
-from django.http import Http404
 from django.shortcuts import redirect, get_object_or_404, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 
-from .models import Genre, Comic, ComicChapter, ChapterImage
 from webcomic_site.tools import range_pagination
-from webcomic_site.views import AjaxableResponseMixin
+from webcomic_site.views import AjaxableResponseMixin, UserResponseMixin
+from .models import Genre, Comic, ComicChapter, ChapterImage
 
 
 # Create your views here.
-class CustomDetailView(DetailView):
-    def dispatch(self, request, *args, **kwargs):
-        """Override function.
-        Handle detail view page.
-        Need to check is comic / chapter state = publish.
-        If comic / chapter not publish, then check whether the user is logged in.
-        If the user logged in then check whether the user is comic author or superuser.
-        If the user is the author then call super function.
-        Otherwise raise 404 page.
-        :param request: Page request.
-        :param args: Arguments.
-        :param kwargs: Keyword arguments.
-        :return: If allowed then call super function. Otherwise raise 404 page.
-        """
-        is_allowed = False
-        obj = self.get_object()
-        if request.user.is_authenticated:
-            if request.user.is_superuser or request.user == obj.author:
-                is_allowed = True
-        else:
-            if obj.state == 1:
-                is_allowed = True
-        if is_allowed:
-            return super().dispatch(request, *args, **kwargs)
-        raise Http404
 
 
 # class GenreDetailView(DetailView):
@@ -93,7 +67,7 @@ class ComicCreateView(AjaxableResponseMixin, CreateView):
         return super().form_valid(form)
 
 
-class ComicDetailView(CustomDetailView):
+class ComicDetailView(UserResponseMixin, DetailView):
     model = Comic
     template_name = 'comic/detail.html'
     context_object_name = 'comic'
@@ -210,7 +184,7 @@ class ChapterCreateView(SuccessMessageMixin, CreateView):
         return reverse('comic_detail', args=[self.comic.slug])
 
 
-class ChapterDetailView(CustomDetailView):
+class ChapterDetailView(UserResponseMixin, DetailView):
     model = ComicChapter
     template_name = 'chapter/detail.html'
     context_object_name = 'chapter'
