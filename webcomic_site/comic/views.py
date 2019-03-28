@@ -14,6 +14,7 @@ from django.views.generic.edit import CreateView, UpdateView
 
 from .models import Genre, Comic, ComicChapter, ChapterImage
 from webcomic_site.tools import range_pagination
+from webcomic_site.views import AjaxableResponseMixin
 
 
 # Create your views here.
@@ -44,26 +45,41 @@ class CustomDetailView(DetailView):
         raise Http404
 
 
-class GenreDetailView(DetailView):
-    model = Genre
-    template_name = 'genre/detail.html'
+# class GenreDetailView(DetailView):
+#     model = Genre
+#     template_name = 'genre/detail.html'
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         comic_list = self.object.comics.filter(state=1).order_by('-publish_date')
+#         paginator = Paginator(comic_list, 40)
+#         page = int(self.request.GET.get('page', 1))
+#         comics = paginator.get_page(page)
+#         pagination = range_pagination(page, comics.paginator.num_pages)
+#         context['comics'] = comics
+#         context['pagination'] = pagination
+#         return context
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        comic_list = self.object.comics.filter(state=1).order_by('-publish_date')
-        paginator = Paginator(comic_list, 40)
-        page = int(self.request.GET.get('page', 1))
-        comics = paginator.get_page(page)
-        pagination = range_pagination(page, comics.paginator.num_pages)
-        context['comics'] = comics
-        context['pagination'] = pagination
-        return context
+def genre_detail(request, slug):
+    genre = get_object_or_404(Genre, slug=slug)
+    comic_list = genre.comics.filter(state=1).order_by('-publish_date')
+    paginator = Paginator(comic_list, 40)
+    page = int(request.GET.get('page', 1))
+    comics = paginator.get_page(page)
+    pagination = range_pagination(page, comics.paginator.num_pages)
+    context = {
+        'genre': genre,
+        'comics': comics,
+        'pagination': pagination,
+    }
+    return render(request, 'genre/detail.html', context=context)
 
 
 # check https://docs.djangoproject.com/en/2.1/topics/class-based-views/intro/ for decorating the class
 @method_decorator(login_required, name='dispatch')
 @method_decorator(permission_required('comic.add_comic', raise_exception=True), name='dispatch')
-class ComicCreateView(SuccessMessageMixin, CreateView):
+# class ComicCreateView(SuccessMessageMixin, AjaxableResponseMixin, CreateView):
+class ComicCreateView(AjaxableResponseMixin, CreateView):
     model = Comic
     fields = ['title', 'description', 'genre', 'thumbnail', 'banner']
     template_name = 'comic/create.html'

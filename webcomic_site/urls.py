@@ -65,7 +65,8 @@ urlpatterns = [
     path('ajax/', include('webcomic_site.ajax.urls')),
 
     # genre routes
-    path('genre/<slug:slug>/', comic_views.GenreDetailView.as_view(), name='genre_detail'),
+    # path('genre/<slug:slug>/', comic_views.GenreDetailView.as_view(), name='genre_detail'),
+    path('genre/<slug:slug>/', comic_views.genre_detail, name='genre_detail'),
 
     # comic routes
     path('comic/create/', comic_views.ComicCreateView.as_view(), name='comic_create'),
