@@ -1,10 +1,11 @@
 from django.contrib.auth.models import User
+from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .models import UserActivation
-from .forms import SignupForm
-
 from webcomic_site.comic.models import Comic
+from webcomic_site.views import AjaxableResponseMixin
+from .forms import SignupForm
+from .models import UserActivation
 
 
 # Create your views here.
@@ -65,3 +66,7 @@ def user_activation(request, token):
         return render(request, 'base/user_activation_success.html')
 
     return render(request, 'base/user_activation_expire.html')
+
+
+class CustomLoginView(AjaxableResponseMixin, LoginView):
+    template_name = 'base/login.html'

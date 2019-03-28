@@ -76,10 +76,10 @@ function ajaxPostData(url, token, form) {
   var formData = new FormData(form);
   xhr.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
+      console.log(this.response);
       var response = JSON.parse(this.response);
-      if (response.hasOwnProperty('pk')) {
+      if (response.hasOwnProperty('success')) {
         // success
-        console.log('form submit success');
         window.location.href = response.redirect;
       } else {
         // has form errors

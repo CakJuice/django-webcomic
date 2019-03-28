@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
+from django.http import Http404
 from django.shortcuts import redirect, get_object_or_404, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -80,6 +81,17 @@ class ComicDetailView(UserResponseMixin, DetailView):
 
 def comic_detail(request, slug):
     comic = get_object_or_404(Comic, slug=slug)
+
+    is_allowed = False
+    if request.user.is_authenticated:
+        if request.user.is_superuser or request.user == comic.author:
+            is_allowed = True
+    else:
+        if comic.state == 1:
+            is_allowed = True
+
+    if not is_allowed:
+        raise Http404
 
     # chapter_list = comic.chapters.all().order_by('-sequence')
     # max_len = 10

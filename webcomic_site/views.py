@@ -20,8 +20,7 @@ class AjaxableResponseMixin:
         response = super().form_valid(form)
         if self.request.is_ajax():
             data = {
-                'pk': self.object.pk,
-                # 'message': self.success_message,
+                'success': True,
                 'redirect': self.get_success_url(),
             }
             return JsonResponse(data)
