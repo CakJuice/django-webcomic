@@ -74,29 +74,36 @@ function ajaxPostData(url, token, form) {
   // Handle ajax form post data
   var xhr = getXHR();
   var formData = new FormData(form);
+  removeAlertForm(form);
   xhr.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      console.log(this.response);
       var response = JSON.parse(this.response);
       if (response.hasOwnProperty('success')) {
         // success
         window.location.href = response.redirect;
       } else {
         // has form errors
+        var isAllErrors = false;
+        if (response.hasOwnProperty('__all__')) {
+          isAllErrors = true;
+          var alertDOM = getAlertFormDOM(response['__all__']);
+          form.insertBefore(alertDOM, form.firstChild);
+        }
+
         getChildInputElement(form);
 
         for (var i=0;i<formChilds.length;i++) {
           var field = formChilds[i];
           var name = field.getAttribute('name')
-          if (name in response) {
+          if (isAllErrors) {
             field.classList.add('is-invalid');
-
-            var msg = document.createElement('div')
-            msg.classList.add('invalid-feedback')
-            msg.innerHTML += response[name];
-            field.parentNode.appendChild(msg);
           } else {
-            field.classList.add('is-valid');
+            if (name in response) {
+              field.classList.add('is-invalid');
+              field.parentNode.innerHTML += getFieldInvalidFeedback(response[name]);
+            } else {
+              field.classList.add('is-valid');
+            }
           }
         }
 
@@ -109,6 +116,28 @@ function ajaxPostData(url, token, form) {
   xhr.setRequestHeader('X-CSRFToken', token);
   xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
   xhr.send(formData);
+}
+
+function getFieldInvalidFeedback(message) {
+  return '<div class="invalid-feedback">' + message + '</div>';
+}
+
+function removeAlertForm(form) {
+  var alerts = document.getElementsByClassName('alert-danger');
+  for (var i=0;i<alerts.length;i++) {
+    var alert = alerts[i];
+    if (alert == form.children[0]) {
+      alert.remove();
+    }
+  }
+}
+
+function getAlertFormDOM(message) {
+  var dom = document.createElement('div');
+  dom.setAttribute('class', 'alert alert-danger');
+  dom.setAttribute('role', 'alert');
+  dom.innerHTML = '<p class="mb-1">' + message + '</p>';
+  return dom;
 }
 
 function getChapterContainer() {
@@ -140,5 +169,5 @@ function getChapter(chapter) {
     '<div class="col col-2 text-center">' +
       '<h4>#' + chapter.sequence + '</h4>' +
     '</div>' +
-  '</div>'
+  '</div>';
 }
