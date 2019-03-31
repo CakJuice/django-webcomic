@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
-from django.contrib.auth.views import LoginView
-from django.shortcuts import render, redirect, get_object_or_404, reverse
+from django.contrib.auth.views import LoginView, PasswordResetView, PasswordResetConfirmView, PasswordChangeView
 from django.http.response import JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404, reverse
 
 from webcomic_site.comic.models import Comic
 from webcomic_site.views import AjaxableResponseMixin
@@ -80,3 +80,17 @@ def user_activation(request, token):
 
 class CustomLoginView(AjaxableResponseMixin, LoginView):
     template_name = 'base/login.html'
+
+
+class CustomPasswordResetView(AjaxableResponseMixin, PasswordResetView):
+    template_name = 'base/password_reset.html'
+    email_template_name = 'base/password_reset_email.html'
+    subject_template_name = 'base/password_reset_subject.txt'
+
+
+class CustomPasswordResetConfirmView(AjaxableResponseMixin, PasswordResetConfirmView):
+    template_name = 'base/password_reset_confirm.html'
+
+
+class CustomPasswordChangeView(AjaxableResponseMixin, PasswordChangeView):
+    template_name = 'base/password_change.html'
