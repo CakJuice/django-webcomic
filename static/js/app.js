@@ -1,5 +1,3 @@
-var formChilds = [];
-
 document.addEventListener('DOMContentLoaded', function() {
   // Attach event change on input file
   var customFileInput = document.getElementsByClassName('custom-file-input');
@@ -12,23 +10,33 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Handle form submit with ajax
-  var forms = document.getElementsByTagName('form');
-  for (var i=0;i<forms.length;i++) {
-    var form = forms[i];
-    var urlTarget = form.getAttribute('action');
-    if (!urlTarget) {
-      urlTarget = window.location.href;
-    }
-
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      formChilds = [];
-      var token = this.children[0].value;
-      ajaxPostData(urlTarget, token, this);
-    });
-  }
+//  // Handle form submit with ajax
+//  var forms = document.getElementsByTagName('form');
+//  for (var i=0;i<forms.length;i++) {
+//    var form = forms[i];
+//    var urlTarget = form.getAttribute('action');
+//    if (!urlTarget) {
+//      urlTarget = window.location.href;
+//    }
+//
+//    form.addEventListener('submit', function(e) {
+//      e.preventDefault();
+//      formChilds = [];
+//      var token = this.children[0].value;
+//      ajaxPostData(urlTarget, token, this);
+//    });
+//  }
 });
+
+function setFormAjax($form) {
+  var urlTarget = $form.getAttribute('action');
+  if (!urlTarget) {
+    urlTarget = window.location.href;
+  }
+
+  var token = $form.children[0].value;
+  ajaxPostData(urlTarget, token, $form);
+}
 
 function getXHR() {
   // get XMLHttpRequest of browser
@@ -36,45 +44,49 @@ function getXHR() {
   return window.ActiveXObject('Microsoft.XMLHTTP');
 }
 
-function clearFieldStatus(field) {
+function clearFieldStatus($field) {
   // clear message / status of field
-  if (field.classList.contains('is-valid')) {
-    field.classList.remove('is-valid');
+  if ($field.classList.contains('is-valid')) {
+    $field.classList.remove('is-valid');
   }
 
-  if (field.classList.contains('is-invalid')) {
-    field.classList.remove('is-invalid');
+  if ($field.classList.contains('is-invalid')) {
+    $field.classList.remove('is-invalid');
   }
 
-  if (field.classList.contains('invalid-feedback')) {
-    field.parentNode.removeChild(field);
+  if ($field.classList.contains('invalid-feedback')) {
+    $field.parentNode.removeChild($field);
   }
 }
 
-function getChildInputElement(parent) {
+function getChildInputElement($parent) {
   // get element ['input', 'textarea', 'select'] inside of form
   var searchTags = ['input', 'textarea', 'select'];
-  var childs = parent.children;
-  for (var i=0;i<childs.length;i++) {
-    var child = childs[i];
-    clearFieldStatus(child);
+  var $childs = $parent.children;
+  var $inputs = []
+  for (var i=0;i<$childs.length;i++) {
+    var $child = $childs[i];
+    clearFieldStatus($child);
 
-    if (searchTags.indexOf(child.tagName.toLowerCase()) >= 0) {
-      formChilds.push(child);
+    if (searchTags.indexOf($child.tagName.toLowerCase()) >= 0) {
+      $inputs.push($child);
       continue;
     }
 
-    if (child.children.length > 0) {
-      getChildInputElement(child);
+    if ($child.children.length > 0) {
+      $newInputs = getChildInputElement($child)
+      $inputs = $inputs.concat($newInputs);
     }
   }
+
+  return $inputs;
 }
 
-function ajaxPostData(url, token, form) {
+function ajaxPostData(url, token, $form) {
   // Handle ajax form post data
+  removeAlertForm($form);
   var xhr = getXHR();
-  var formData = new FormData(form);
-  removeAlertForm(form);
+  var formData = new FormData($form);
   xhr.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       var response = JSON.parse(this.response);
@@ -86,29 +98,27 @@ function ajaxPostData(url, token, form) {
         var isAllErrors = false;
         if (response.hasOwnProperty('__all__')) {
           isAllErrors = true;
-          var alertDOM = getAlertFormDOM(response['__all__']);
-          form.insertBefore(alertDOM, form.firstChild);
+          var $alertDOM = getAlertFormDOM(response['__all__']);
+          $form.insertBefore($alertDOM, $form.firstChild);
         }
 
-        getChildInputElement(form);
+        var $formChilds = getChildInputElement($form);
 
-        for (var i=0;i<formChilds.length;i++) {
-          var field = formChilds[i];
-          var name = field.getAttribute('name')
+        for (var i=0;i<$formChilds.length;i++) {
+          var $field = $formChilds[i];
+          var name = $field.getAttribute('name');
           if (isAllErrors) {
-            field.classList.add('is-invalid');
+            $field.classList.add('is-invalid');
           } else {
             if (name in response) {
-              field.classList.add('is-invalid');
-              var message = getFieldInvalidFeedback(response[name])
-              field.parentNode.insertBefore(message, field.nextSibling);
+              $field.classList.add('is-invalid');
+              var $feedback = getFieldInvalidFeedback(response[name])
+              $field.parentNode.insertBefore($feedback, $field.nextSibling);
             } else {
-              field.classList.add('is-valid');
+              $field.classList.add('is-valid');
             }
           }
         }
-
-        formChilds = []
       }
     }
   }
@@ -122,19 +132,19 @@ function ajaxPostData(url, token, form) {
 function getFieldInvalidFeedback(message) {
   // To get invalid message of form field.
   // return message as HTML DOM.
-  var dom = document.createElement('div');
-  dom.setAttribute('class', 'invalid-feedback');
-  dom.innerHTML = message;
-  return dom;
+  var $dom = document.createElement('div');
+  $dom.setAttribute('class', 'invalid-feedback');
+  $dom.innerHTML = message;
+  return $dom;
 }
 
-function removeAlertForm(form) {
+function removeAlertForm($form) {
   // To remove previous alert of form, used before form submitted.
-  var alerts = document.getElementsByClassName('alert-danger');
-  for (var i=0;i<alerts.length;i++) {
-    var alert = alerts[i];
-    if (alert == form.children[0]) {
-      alert.remove();
+  var $alerts = document.getElementsByClassName('alert-danger');
+  for (var i=0;i<$alerts.length;i++) {
+    var $alert = $alerts[i];
+    if ($alert == $form.children[0]) {
+      $alert.remove();
     }
   }
 }
@@ -142,11 +152,11 @@ function removeAlertForm(form) {
 function getAlertFormDOM(message) {
   // get alert of invalid form (global error message, not field message).
   // return alert message as HTML DOM.
-  var dom = document.createElement('div');
-  dom.setAttribute('class', 'alert alert-danger');
-  dom.setAttribute('role', 'alert');
-  dom.innerHTML = '<p class="mb-1">' + message + '</p>';
-  return dom;
+  var $dom = document.createElement('div');
+  $dom.setAttribute('class', 'alert alert-danger');
+  $dom.setAttribute('role', 'alert');
+  $dom.innerHTML = '<p class="mb-1">' + message + '</p>';
+  return $dom;
 }
 
 function getChapterContainer() {
