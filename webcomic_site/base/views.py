@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, reverse
+from django.http.response import JsonResponse
 
 from webcomic_site.comic.models import Comic
 from webcomic_site.views import AjaxableResponseMixin
@@ -34,7 +35,16 @@ def signup(request):
             user.save()
             activation = UserActivation.objects.create(user=user)
             activation.send_mail_activation(request)
-            return redirect('signup_success', username=user.username)
+            if request.is_ajax():
+                return JsonResponse({
+                    'success': True,
+                    'redirect': reverse('signup_success', args=[user.username])
+                })
+            else:
+                return redirect('signup_success', username=user.username)
+        else:
+            if request.is_ajax():
+                return JsonResponse(form.errors)
     else:
         form = SignupForm()
 

@@ -100,7 +100,8 @@ function ajaxPostData(url, token, form) {
           } else {
             if (name in response) {
               field.classList.add('is-invalid');
-              field.parentNode.innerHTML += getFieldInvalidFeedback(response[name]);
+              var message = getFieldInvalidFeedback(response[name])
+              field.parentNode.insertBefore(message, field.nextSibling);
             } else {
               field.classList.add('is-valid');
             }
@@ -119,10 +120,16 @@ function ajaxPostData(url, token, form) {
 }
 
 function getFieldInvalidFeedback(message) {
-  return '<div class="invalid-feedback">' + message + '</div>';
+  // To get invalid message of form field.
+  // return message as HTML DOM.
+  var dom = document.createElement('div');
+  dom.setAttribute('class', 'invalid-feedback');
+  dom.innerHTML = message;
+  return dom;
 }
 
 function removeAlertForm(form) {
+  // To remove previous alert of form, used before form submitted.
   var alerts = document.getElementsByClassName('alert-danger');
   for (var i=0;i<alerts.length;i++) {
     var alert = alerts[i];
@@ -133,6 +140,8 @@ function removeAlertForm(form) {
 }
 
 function getAlertFormDOM(message) {
+  // get alert of invalid form (global error message, not field message).
+  // return alert message as HTML DOM.
   var dom = document.createElement('div');
   dom.setAttribute('class', 'alert alert-danger');
   dom.setAttribute('role', 'alert');
@@ -141,14 +150,20 @@ function getAlertFormDOM(message) {
 }
 
 function getChapterContainer() {
+  // get chapter container, used for comic detail.
+  // return string of element.
   return '<div class="col col-md-9 col-12" id="chapter-container"></div>';
 }
 
 function getNoChapterText() {
+  // get no chapter text, when comic don't have a chapter.
+  // return string of element.
   return '<h1>Sorry there are no chapters for this comic!</h1>';
 }
 
 function getChapter(chapter) {
+  // get chapter list of comic.
+  // return string of element.
   var chapterThumbnail;
   if (!chapter.thumbnail || chapter.thumbnail == '') {
     chapterThumbnail = '<img src="' + DEFAULT_THUMBNAIL + '" class="img-fluid">';
