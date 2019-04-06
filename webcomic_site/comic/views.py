@@ -37,15 +37,15 @@ from .models import Genre, Comic, ComicChapter, ChapterImage
 
 def genre_detail(request, slug):
     genre = get_object_or_404(Genre, slug=slug)
-    comic_list = genre.comics.filter(state=1).order_by('-publish_date')
-    paginator = Paginator(comic_list, 40)
-    page = int(request.GET.get('page', 1))
-    comics = paginator.get_page(page)
-    pagination = range_pagination(page, comics.paginator.num_pages)
+    # comic_list = genre.comics.filter(state=1).order_by('-publish_date')
+    # paginator = Paginator(comic_list, 40)
+    # page = int(request.GET.get('page', 1))
+    # comics = paginator.get_page(page)
+    # pagination = range_pagination(page, comics.paginator.num_pages)
     context = {
         'genre': genre,
-        'comics': comics,
-        'pagination': pagination,
+        # 'comics': comics,
+        # 'pagination': pagination,
     }
     return render(request, 'genre/detail.html', context=context)
 

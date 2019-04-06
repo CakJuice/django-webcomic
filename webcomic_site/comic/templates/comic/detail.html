@@ -76,7 +76,7 @@
     if (response.success && response.chapters.length > 0) {
       for (var i=0;i<response.chapters.length;i++) {
         var chapter = response.chapters[i];
-        chapterContainer.innerHTML += getChapter(chapter);
+        chapterContainer.innerHTML += getChapterList(chapter);
       }
     } else {
       chapterContainer.innerHTML += getNoChapterText();

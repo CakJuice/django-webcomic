@@ -171,7 +171,7 @@ function getNoChapterText() {
   return '<h1>Sorry there are no chapters for this comic!</h1>';
 }
 
-function getChapter(chapter) {
+function getChapterList(chapter) {
   // get chapter list of comic.
   // return string of element.
   var chapterThumbnail;
@@ -195,4 +195,47 @@ function getChapter(chapter) {
       '<h4>#' + chapter.sequence + '</h4>' +
     '</div>' +
   '</div>';
+}
+
+function getNoComicText() {
+  return '<div class="col col-12"><h4>Sorry there are no comics for this time!</h4></div>';
+}
+
+function getComicList(comic) {
+  var comicThumbnail;
+  if (!comic.thumbnail || comic.thumbnail == '') {
+    comicThumbnail = '<img src="' + DEFAULT_THUMBNAIL + '" class="card-img-top img-fluid">';
+  } else {
+    comicThumbnail = '<img src="' + comic.thumbnail + '" class="card-img-top img-fluid">';
+  }
+
+  return '<div class="col col-lg-3 col-md-4 col-6">' +
+    '<div class="card">' +
+      comicThumbnail +
+      '<div class="card-body">' +
+        '<h5 class="card-title"><a href="' + comic.direct_url + '">' + comic.title + '</h5>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function ajaxData(url, container) {
+  var xhr = getXHR();
+  xhr.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var response = JSON.parse(this.response);
+      if (response.count > 0) {
+        for (var i=0;i<response.results.length;i++) {
+          var result = response.results[i];
+          container.innerHTML += getComicList(result);
+        }
+      } else {
+        container.innerHTML = getNoComicText();
+      }
+    }
+  }
+
+  xhr.open('GET', url, true);
+  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  xhr.send();
 }
