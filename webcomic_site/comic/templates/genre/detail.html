@@ -44,3 +44,10 @@
     {% endif %}
   </div>
 {% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+  var url = "{% url 'api_comic_list_by_genre' genre.slug %}";
+  console.log(url);
+</script>
+{% endblock %}

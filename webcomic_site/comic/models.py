@@ -5,6 +5,7 @@ from uuid import uuid4
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
+from django.shortcuts import reverse
 from django.utils import timezone
 
 from webcomic_site.base.models import BaseModel
@@ -88,6 +89,9 @@ class Comic(models.Model):
         if state == 1:
             self.publish_date = timezone.now()
         self.save()
+
+    def get_direct_url(self):
+        return reverse('comic_detail', kwargs={'slug': self.slug})
 
 
 def get_upload_chapter_path(instance):

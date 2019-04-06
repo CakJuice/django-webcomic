@@ -10,3 +10,6 @@ router.register(r'comics', views.ComicViewSet)
 # router.register(r'comics/update-state', views.UpdateComicState)
 
 urlpatterns = router.urls
+urlpatterns += [
+    path('genres/<slug:genre_slug>/comics/', views.ComicListByGenre.as_view(), name='api_comic_list_by_genre'),
+]

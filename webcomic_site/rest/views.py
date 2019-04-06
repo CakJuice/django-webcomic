@@ -4,10 +4,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from webcomic_site.comic.models import Genre, Comic
-from . import serializers, permissions
+from . import serializers, permissions, paginations
 
 
-# Create your views here.
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
@@ -30,6 +29,15 @@ class ComicViewSet(viewsets.ModelViewSet):
     #     if self.request.method != 'GET':
     #         self.permission_classes = (IsAuthenticated,)
     #     return super().get_permissions()
+
+
+class ComicListByGenre(paginations.PaginationExtraContentMixin, generics.ListAPIView):
+    serializer_class = serializers.ComicListSerializer
+    pagination_class = paginations.StandardPagination
+
+    def get_queryset(self):
+        genre = Genre.objects.get(slug=self.kwargs['genre_slug'])
+        return genre.comics.filter(state=1).order_by('-updated_at')
 
 
 class UpdateComicState(generics.UpdateAPIView):
