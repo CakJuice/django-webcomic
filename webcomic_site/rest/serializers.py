@@ -1,5 +1,4 @@
 from django.contrib.auth.models import User
-from django.shortcuts import reverse
 from rest_framework import serializers
 
 from webcomic_site.comic.models import Genre, Comic
@@ -37,13 +36,15 @@ class ComicSerializer(serializers.HyperlinkedModelSerializer):
 
 class ComicListSerializer(serializers.HyperlinkedModelSerializer):
     direct_url = serializers.ReadOnlyField(source='get_direct_url')
+    author_username = serializers.CharField(source='author.username', read_only=True)
 
     class Meta:
         model = Comic
-        fields = ('title', 'description', 'genre', 'thumbnail', 'slug', 'url', 'direct_url')
+        fields = ('title', 'description', 'genre', 'thumbnail', 'slug', 'author', 'author_username', 'url', 'direct_url')
         extra_kwargs = {
             'url': {'lookup_field': 'slug'},
             'genre': {'lookup_field': 'slug'},
+            'author': {'lookup_field': 'username'},
         }
 
 

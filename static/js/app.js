@@ -198,36 +198,70 @@ function getChapterList(chapter) {
 }
 
 function getNoComicText() {
+  // get no comic text, for genre detail.
+  // return string of element.
   return '<div class="col col-12"><h4>Sorry there are no comics for this time!</h4></div>';
 }
 
 function getComicList(comic) {
+  /* Get comic list for genre detail.
+   * param comic: Object. Comic object to display as a list.
+   * return String of element.
+  */
   var comicThumbnail;
   if (!comic.thumbnail || comic.thumbnail == '') {
-    comicThumbnail = '<img src="' + DEFAULT_THUMBNAIL + '" class="card-img-top img-fluid">';
+    comicThumbnail = '<img src="' + DEFAULT_THUMBNAIL + '" class="img-fluid">';
   } else {
-    comicThumbnail = '<img src="' + comic.thumbnail + '" class="card-img-top img-fluid">';
+    comicThumbnail = '<img src="' + comic.thumbnail + '" class="img-fluid">';
   }
 
-  return '<div class="col col-lg-3 col-md-4 col-6">' +
-    '<div class="card">' +
-      comicThumbnail +
-      '<div class="card-body">' +
-        '<h5 class="card-title"><a href="' + comic.direct_url + '">' + comic.title + '</h5>' +
-      '</div>' +
-    '</div>' +
+  return '<div class="col col-lg-4 col-md-6 col-12">' +
+    '<div class="row my-2 mx-1 py-2 comic-list">' +
+      '<div class="col col-4 pr-1">' + comicThumbnail + '</div>' +
+      '<div class="col col-8 pl-1"><h5 class="card-title"><a href="' + comic.direct_url + '">' + comic.title + '</h5>' +
+    '</div>'
   '</div>';
 }
 
-function ajaxData(url, container) {
+function getComicContainer() {
+  return document.getElementById('comic-container');
+}
+
+function getPaginationContainer() {
+  return document.getElementById('pagination-container');
+}
+
+function ajaxComicListData(url) {
+  /* Get comic list data via ajax (XMLHttpRequest).
+   * params url: String. URL of comic ajax.
+  */
   var xhr = getXHR();
+  var container = getComicContainer();
+  var paginationContainer = getPaginationContainer();
   xhr.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       var response = JSON.parse(this.response);
+      paginationContainer.innerHTML = '';
+      container.innerHTML = '';
       if (response.count > 0) {
         for (var i=0;i<response.results.length;i++) {
           var result = response.results[i];
           container.innerHTML += getComicList(result);
+        }
+
+        if (response.next || response.previous) {
+          var pagination = {
+            count: response.count,
+            next: response.next,
+            previous: response.previous,
+            start: response.start,
+            current: response.current,
+            end: response.end,
+            num_pages: response.num_pages,
+          }
+
+          var paginationStr = getPagination(pagination, url);
+          paginationContainer.innerHTML = paginationStr;
         }
       } else {
         container.innerHTML = getNoComicText();
@@ -238,4 +272,67 @@ function ajaxData(url, container) {
   xhr.open('GET', url, true);
   xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
   xhr.send();
+}
+
+function getPaginationDisabled(pagination) {
+  /* Get pagination disabled text, ex: "Page 1 Of 5".
+   * param pagination: Object. Pagination data object.
+   * return: String of element.
+  */
+  return '<li class="page-item disabled">' +
+    '<span class="page-link">Page ' + pagination.current + ' Of ' + pagination.num_pages + '</span>'
+  '</li>';
+}
+
+function clickPaginationItem(dom) {
+  /* Handle onclick of pagination item link. When item link clicked, it will trigger ajaxComicListData.
+   * param dom: Object. DOM of item link.
+  */
+  ajaxComicListData(dom.getAttribute('href'));
+}
+
+function getPaginationItem(url, text, active) {
+  /* Get pagination item list.
+   * param url: String. URL for pagination item.
+   * param text: String. Text of pagination.
+   * param active: Boolean. Set if pagination item is active or not.
+   * return: String of element.
+  */
+  active = active || false;
+  if (active) {
+    return '<li class="page-item active">' +
+      '<span class="page-link">' +
+        text + '<span class="sr-only">(current)</span>' +
+      '</span>' +
+    '</li>';
+  }
+
+  return '<li class="page-item">' +
+    '<a class="page-link" href="' + url + '" onclick="clickPaginationItem(this); return false;">' + text + '</a>' +
+  '</li>';
+}
+
+function getPagination(pagination, url) {
+  /* Get pagination for general purpose.
+   * param pagination: Object. Pagination data object.
+   * param url: String. URL for pagination link.
+   * return: String of element.
+  */
+  var baseUrl = url.split(/[?#]/)[0];
+  var pageDisabled = getPaginationDisabled(pagination);
+  var pageFirst = pagination.previous ? getPaginationItem(baseUrl + '?page=1', '&laquo;') : '';
+  var pageMain = ''
+  for (var i=pagination.start;i<=pagination.end;i++) {
+    pageMain += getPaginationItem(baseUrl + '?page=' + i, i, i == pagination.current);
+  }
+  var pageLast = pagination.next ? getPaginationItem(baseUrl + '?page=' + pagination.num_pages, '&raquo;') : '';
+
+  return '<nav aria-label="Pagination">' +
+    '<ul class="pagination justify-content-center">' +
+      pageDisabled +
+      pageFirst +
+      pageMain +
+      pageLast +
+    '</ul>' +
+  '</nav>';
 }

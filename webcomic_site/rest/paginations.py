@@ -6,7 +6,7 @@ from webcomic_site.tools import dict_pagination
 
 
 class StandardPagination(PageNumberPagination):
-    page_size = 40
+    page_size = 2
     page_query_control = 'page_size'
     # max_page_size = 2
 
@@ -17,5 +17,6 @@ class PaginationExtraContentMixin:
         current_page = int(request.GET.get('page', '1'))
         num_pages = ceil(response.data['count'] / self.pagination_class.page_size)
         pagination = dict_pagination(current_page, num_pages)
+        response.data['num_pages'] = num_pages
         response.data.update(pagination)
         return response

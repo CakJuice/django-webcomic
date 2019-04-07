@@ -81,3 +81,8 @@ body {
   font-size: 18px;
   color: rgba(195,15,66,1);
 }
+
+.comic-list {
+  background-color: #fff;
+  border-radius: 3px;
+}
