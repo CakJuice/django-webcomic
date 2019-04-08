@@ -174,12 +174,14 @@ function getNoChapterText() {
 function getChapterList(chapter) {
   // get chapter list of comic.
   // return string of element.
-  var chapterThumbnail;
+  var thumbnail;
   if (!chapter.thumbnail || chapter.thumbnail == '') {
-    chapterThumbnail = '<img src="' + DEFAULT_THUMBNAIL + '" class="img-fluid">';
+    thumbnail = DEFAULT_THUMBNAIL;
   } else {
-    chapterThumbnail = '<img src="' + chapter.thumbnail + '" class="img-fluid">';
+    thumbnail = chapter.thumbnail;
   }
+
+  var chapterThumbnail = '<img src="' + thumbnail + '" class="img-fluid" loading="lazy" alt="' + chapter.title + '">';
 
   return '<div class="row border-bottom py-1">' +
     '<div class="col col-2">' + chapterThumbnail + '</div>' +
@@ -208,12 +210,14 @@ function getComicList(comic) {
    * param comic: Object. Comic object to display as a list.
    * return String of element.
   */
-  var comicThumbnail;
+  var thumbnail;
   if (!comic.thumbnail || comic.thumbnail == '') {
-    comicThumbnail = '<img src="' + DEFAULT_THUMBNAIL + '" class="img-fluid">';
+    thumbnail = DEFAULT_THUMBNAIL;
   } else {
-    comicThumbnail = '<img src="' + comic.thumbnail + '" class="img-fluid">';
+    thumbnail = comic.thumbnail;
   }
+
+  var comicThumbnail = '<img src="' + thumbnail + '" class="img-fluid" loading="lazy" alt="' + comic.title + '">';
 
   return '<div class="col col-lg-4 col-md-6 col-12">' +
     '<div class="row my-2 mx-1 py-2 comic-list">' +
