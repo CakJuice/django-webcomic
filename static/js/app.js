@@ -224,10 +224,16 @@ function getComicList(comic) {
 }
 
 function getComicContainer() {
+  /* Get comic list container.
+   * return: DOM of comic list container.
+  */
   return document.getElementById('comic-container');
 }
 
 function getPaginationContainer() {
+  /* Get pagination container.
+   * return: DOM of pagination container.
+  */
   return document.getElementById('pagination-container');
 }
 
@@ -236,17 +242,17 @@ function ajaxComicListData(url) {
    * params url: String. URL of comic ajax.
   */
   var xhr = getXHR();
-  var container = getComicContainer();
-  var paginationContainer = getPaginationContainer();
+  var $container = getComicContainer();
+  var $paginationContainer = getPaginationContainer();
   xhr.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       var response = JSON.parse(this.response);
-      paginationContainer.innerHTML = '';
-      container.innerHTML = '';
+      $paginationContainer.innerHTML = '';
+      $container.innerHTML = '';
       if (response.count > 0) {
         for (var i=0;i<response.results.length;i++) {
           var result = response.results[i];
-          container.innerHTML += getComicList(result);
+          $container.innerHTML += getComicList(result);
         }
 
         if (response.next || response.previous) {
@@ -261,10 +267,10 @@ function ajaxComicListData(url) {
           }
 
           var paginationStr = getPagination(pagination, url);
-          paginationContainer.innerHTML = paginationStr;
+          $paginationContainer.innerHTML = paginationStr;
         }
       } else {
-        container.innerHTML = getNoComicText();
+        $container.innerHTML = getNoComicText();
       }
     }
   }
@@ -284,11 +290,11 @@ function getPaginationDisabled(pagination) {
   '</li>';
 }
 
-function clickPaginationItem(dom) {
+function clickPaginationItem($link) {
   /* Handle onclick of pagination item link. When item link clicked, it will trigger ajaxComicListData.
    * param dom: Object. DOM of item link.
   */
-  ajaxComicListData(dom.getAttribute('href'));
+  ajaxComicListData($link.getAttribute('href'));
 }
 
 function getPaginationItem(url, text, active) {
