@@ -72,7 +72,6 @@
   var chapterContainer = document.getElementById('chapter-container');
   var url = "{% url 'comic_chapter_ajax' comic_slug=comic.slug %}";
   $.get(url, function(response) {
-    console.log(response);
     if (response.success && response.chapters.length > 0) {
       for (var i=0;i<response.chapters.length;i++) {
         var chapter = response.chapters[i];

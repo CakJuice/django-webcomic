@@ -53,10 +53,9 @@ def genre_detail(request, slug):
 # check https://docs.djangoproject.com/en/2.1/topics/class-based-views/intro/ for decorating the class
 @method_decorator(login_required, name='dispatch')
 @method_decorator(permission_required('comic.add_comic', raise_exception=True), name='dispatch')
-# class ComicCreateView(SuccessMessageMixin, AjaxableResponseMixin, CreateView):
-class ComicCreateView(AjaxableResponseMixin, CreateView):
+class ComicCreateView(SuccessMessageMixin, AjaxableResponseMixin, CreateView):
     model = Comic
-    fields = ['title', 'description', 'genre', 'thumbnail', 'banner']
+    fields = ['title', 'description', 'genre']
     template_name = 'comic/create.html'
     success_message = 'Congratulation! You have created a new comic.'
 
@@ -109,10 +108,10 @@ def comic_detail(request, slug):
     return render(request, 'comic/detail.html', context=context)
 
 
-class ComicUpdateView(SuccessMessageMixin, UpdateView):
+class ComicUpdateView(SuccessMessageMixin, AjaxableResponseMixin, UpdateView):
     model = Comic
     template_name = 'comic/update.html'
-    fields = ['title', 'description', 'genre', 'thumbnail', 'banner', 'state']
+    fields = ['title', 'description', 'genre']
     context_object_name = 'comic'
     success_message = 'Success! Comic has been updated.'
     last_thumbnail = None
@@ -163,9 +162,9 @@ def action_state(request, slug, state):
     raise PermissionDenied
 
 
-class ChapterCreateView(SuccessMessageMixin, CreateView):
+class ChapterCreateView(SuccessMessageMixin, AjaxableResponseMixin, CreateView):
     model = ComicChapter
-    fields = ['title', 'thumbnail', 'sequence']
+    fields = ['title', 'sequence']
     template_name = 'chapter/create.html'
     success_message = 'Congratulation! You have created a new chapter.'
 
@@ -209,7 +208,7 @@ class ChapterDetailView(UserResponseMixin, DetailView):
         return get_object_or_404(ComicChapter, slug=self.kwargs['chapter_slug'])
 
 
-class ChapterUpdateView(SuccessMessageMixin, UpdateView):
+class ChapterUpdateView(SuccessMessageMixin, AjaxableResponseMixin, UpdateView):
     model = ComicChapter
     template_name = 'chapter/update.html'
     fields = ['title', 'thumbnail', 'sequence']

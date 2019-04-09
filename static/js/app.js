@@ -28,7 +28,10 @@ document.addEventListener('DOMContentLoaded', function() {
 //  }
 });
 
-function setFormAjax($form) {
+function submitFormAjax($form) {
+  /* Submit form via ajax.
+   * param $form: DOM of form element.
+  */
   var urlTarget = $form.getAttribute('action');
   if (!urlTarget) {
     urlTarget = window.location.href;

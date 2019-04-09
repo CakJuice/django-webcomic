@@ -10,7 +10,7 @@ def get_unique_slug(text):
     :param text: Text to slugify.
     :return: Slug value with random string added.
     """
-    return '%s-%s' % (slugify(text), get_random_string(6))
+    return '%s-%s' % (slugify(text), get_random_string(4))
 
 
 def get_unique_model_slug(model, value):
