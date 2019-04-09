@@ -205,6 +205,11 @@ function getNoComicText() {
   return '<div class="col col-12"><h4>Sorry there are no comics for this time!</h4></div>';
 }
 
+function clickComicList($elem) {
+  console.log($elem);
+  window.location.href = $elem.getAttribute('data-href');
+}
+
 function getComicList(comic) {
   /* Get comic list for genre detail.
    * param comic: Object. Comic object to display as a list.
@@ -219,10 +224,10 @@ function getComicList(comic) {
 
   var comicThumbnail = '<img src="' + thumbnail + '" class="img-fluid" loading="lazy" alt="' + comic.title + '">';
 
-  return '<div class="col col-lg-4 col-md-6 col-12">' +
+  return '<div class="col col-lg-4 col-md-6 col-12" onclick="clickComicList(this);" data-href="' + comic.direct_url + '">' +
     '<div class="row my-2 mx-1 py-2 comic-list">' +
       '<div class="col col-4 pr-1">' + comicThumbnail + '</div>' +
-      '<div class="col col-8 pl-1"><h5 class="card-title"><a href="' + comic.direct_url + '">' + comic.title + '</h5>' +
+      '<div class="col col-8 pl-1"><h5>' + comic.title + '</h5>' +
     '</div>'
   '</div>';
 }

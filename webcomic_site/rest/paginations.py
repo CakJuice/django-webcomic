@@ -6,7 +6,7 @@ from webcomic_site.tools import dict_pagination
 
 
 class StandardPagination(PageNumberPagination):
-    page_size = 2
+    page_size = 30
     page_query_control = 'page_size'
     # max_page_size = 2
 
