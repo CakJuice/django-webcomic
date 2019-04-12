@@ -1,4 +1,18 @@
 document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('click', function(e) {
+    /* Event listener handler for document element.
+     * This code will be executed when user clicked on all document area.
+    */
+    if (e.target.className == 'nav-link dropdown-toggle') {
+      // Check whether element is 'nav-link dropdown toggle'.
+      // Set nextElementSibling to toggling 'show' class name.
+      var sibling = e.target.nextElementSibling;
+      sibling.classList.toggle('show');
+    } else {
+      hideNavDropdown();
+    }
+  });
+
   // Attach event change on input file
   var customFileInput = document.getElementsByClassName('custom-file-input');
   for (var i=0;i<customFileInput.length;i++) {
@@ -27,6 +41,18 @@ document.addEventListener('DOMContentLoaded', function() {
 //    });
 //  }
 });
+
+function hideNavDropdown() {
+  // To hide all shown navbar dropdown.
+  var navDropdowns = document.getElementsByClassName('nav-link dropdown-toggle');
+  for (var i=0;i<navDropdowns.length;i++) {
+    var dropdown = navDropdowns[i];
+    var sibling = dropdown.nextElementSibling;
+    if (sibling.classList.contains('show')) {
+      sibling.classList.remove('show');
+    }
+  }
+}
 
 function submitFormAjax($form) {
   /* Submit form via ajax.
