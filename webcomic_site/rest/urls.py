@@ -12,5 +12,5 @@ router.register(r'comics', views.ComicViewSet)
 urlpatterns = router.urls
 urlpatterns += [
     path('genres/<slug:genre_slug>/comics/', views.ComicListByGenre.as_view(), name='api_comic_list_by_genre'),
-    path('<slug:comic_slug>/chapters/', views.AuthorChapterListByComic.as_view(), name='api_chapter_list_by_genre'),
+    path('<slug:comic_slug>/chapters/', views.AuthorChapterListByComic.as_view(), name='api_author_chapter_list_by_genre'),
 ]

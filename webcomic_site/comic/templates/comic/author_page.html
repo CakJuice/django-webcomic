@@ -8,8 +8,7 @@
     <h1>{{ comic.title }}</h1>
     <div class="row">
       <div class="col col-md-9 col-12" id="author-chapter-container">
-        <h1>Chapter List</h1>
-        <author-chapter-container></author-chapter-container>
+        <author-chapter-container url="{% url 'api_author_chapter_list_by_genre' comic_slug=comic.slug %}"></author-chapter-container>
       </div>
       <div class="col col-md-3 col-12">
         <div class="card">

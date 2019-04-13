@@ -82,7 +82,8 @@ body {
   color: rgba(195,15,66,1);
 }
 
-.comic-list {
+.comic-list,
+.chapter-list {
   background-color: #e8e8e8;
   border-radius: 5px;
   cursor: pointer;
