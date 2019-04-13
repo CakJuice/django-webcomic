@@ -40,6 +40,15 @@ class ComicListByGenre(paginations.PaginationExtraContentMixin, generics.ListAPI
         return genre.comics.filter(state=1).order_by('-updated_at')
 
 
+class AuthorChapterListByComic(paginations.PaginationExtraContentMixin, generics.ListAPIView):
+    serializer_class = serializers.ChapterListSerializer
+    pagination_class = paginations.StandardPagination
+
+    def get_queryset(self):
+        comic = Comic.objects.get(slug=self.kwargs['comic_slug'])
+        return comic.chapters.all().order_by('-sequence')
+
+
 class UpdateComicState(generics.UpdateAPIView):
     queryset = Comic.objects.all()
     serializer_class = serializers.UpdateComicStateSerializer

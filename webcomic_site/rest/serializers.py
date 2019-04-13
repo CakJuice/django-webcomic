@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from webcomic_site.comic.models import Genre, Comic
+from webcomic_site.comic.models import Genre, Comic, ComicChapter
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -46,6 +46,12 @@ class ComicListSerializer(serializers.HyperlinkedModelSerializer):
             'genre': {'lookup_field': 'slug'},
             'author': {'lookup_field': 'username'},
         }
+
+
+class ChapterListSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = ComicChapter
+        fields = ('title', 'thumbnail', 'state', 'read', 'sequence')
 
 
 class UpdateComicStateSerializer(serializers.HyperlinkedModelSerializer):

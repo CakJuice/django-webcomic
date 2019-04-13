@@ -9,9 +9,7 @@
     <div class="row">
       <div class="col col-md-9 col-12" id="author-chapter-container">
         <h1>Chapter List</h1>
-        <div class="row">
-          <author-chapter-list></author-chapter-list>
-        </div>
+        <author-chapter-container></author-chapter-container>
       </div>
       <div class="col col-md-3 col-12">
         <div class="card">
@@ -39,4 +37,12 @@
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block extra_script %}
+<script>
+  new Vue({
+    el: '#main-content',
+  })
+</script>
 {% endblock %}
