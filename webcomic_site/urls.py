@@ -62,8 +62,8 @@ urlpatterns = [
 
     # comic routes
     path('comic/create/', comic_views.ComicCreateView.as_view(), name='comic_create'),
-    # path('<slug:slug>/', comic_views.ComicDetailView.as_view(), name='comic_detail'),
-    path('<slug:slug>/', comic_views.comic_detail, name='comic_detail'),
+    path('<slug:slug>/', comic_views.ComicDetailView.as_view(), name='comic_detail'),
+    path('<slug:slug>/author-page/', comic_views.ComicAuthorPageView.as_view(), name='comic_author'),
     path('<slug:slug>/update/', comic_views.ComicUpdateView.as_view(), name='comic_update'),
     path('<slug:slug>/update-state/<int:state>/', comic_views.action_state, name='comic_state'),
 

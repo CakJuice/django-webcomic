@@ -13,7 +13,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 
 from webcomic_site.tools import range_pagination
-from webcomic_site.views import AjaxableResponseMixin, UserResponseMixin
+from webcomic_site.views import AjaxableResponseMixin, UserResponseMixin, OnlyAuthorOrSuperuserAccessMixin
 from .models import Genre, Comic, ComicChapter, ChapterImage
 
 
@@ -72,40 +72,11 @@ class ComicDetailView(UserResponseMixin, DetailView):
     template_name = 'comic/detail.html'
     context_object_name = 'comic'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['chapters'] = self.object.chapters.all()
-        return context
 
-
-def comic_detail(request, slug):
-    comic = get_object_or_404(Comic, slug=slug)
-
-    is_allowed = False
-    if request.user.is_authenticated:
-        if request.user.is_superuser or request.user == comic.author:
-            is_allowed = True
-    else:
-        if comic.state == 1:
-            is_allowed = True
-
-    if not is_allowed:
-        raise Http404
-
-    # chapter_list = comic.chapters.all().order_by('-sequence')
-    # max_len = 10
-    # paginator = Paginator(chapter_list, max_len)
-    #
-    # page = int(request.GET.get('page', 1))
-    # chapters = paginator.get_page(page)
-    # pagination = range_pagination(page, chapters.paginator.num_pages)
-
-    context = {
-        'comic': comic,
-        # 'chapters': chapters,
-        # 'pagination': pagination,
-    }
-    return render(request, 'comic/detail.html', context=context)
+class ComicAuthorPageView(OnlyAuthorOrSuperuserAccessMixin, DetailView):
+    model = Comic
+    template_name = 'comic/author_page.html'
+    context_object_name = 'comic'
 
 
 class ComicUpdateView(SuccessMessageMixin, AjaxableResponseMixin, UpdateView):

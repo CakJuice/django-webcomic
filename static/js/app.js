@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (e.target.className == 'nav-link dropdown-toggle') {
       // Check whether element is 'nav-link dropdown toggle'.
       // Set nextElementSibling to toggling 'show' class name.
+      e.preventDefault();
       var sibling = e.target.nextElementSibling;
       sibling.classList.toggle('show');
     } else {
@@ -41,6 +42,13 @@ document.addEventListener('DOMContentLoaded', function() {
 //    });
 //  }
 });
+
+function closeAlert($btn) {
+  /* Click event handler for close button in alert.
+   * param $alert: DOM of close button.
+  */
+  $btn.parentNode.remove();
+}
 
 function hideNavDropdown() {
   // To hide all shown navbar dropdown.
@@ -235,7 +243,6 @@ function getNoComicText() {
 }
 
 function clickComicList($elem) {
-  console.log($elem);
   window.location.href = $elem.getAttribute('data-href');
 }
 

@@ -41,14 +41,22 @@ class UserResponseMixin:
         :param kwargs: Keyword arguments.
         :return: If allowed then call super function. Otherwise raise 404 page.
         """
-        is_allowed = False
         obj = self.get_object()
         if request.user.is_authenticated:
-            if request.user.is_superuser or request.user == obj.author:
-                is_allowed = True
+            is_allowed = request.user.is_superuser or request.user == obj.author
         else:
-            if obj.state == 1:
-                is_allowed = True
+            is_allowed = obj.state == 1
+        if is_allowed:
+            return super().dispatch(request, *args, **kwargs)
+        raise Http404
+
+
+class OnlyAuthorOrSuperuserAccessMixin:
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+        is_allowed = False
+        if request.user.is_authenticated:
+            is_allowed = request.user.is_superuser or request.user == obj.author
         if is_allowed:
             return super().dispatch(request, *args, **kwargs)
         raise Http404
