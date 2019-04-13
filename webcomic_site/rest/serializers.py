@@ -40,7 +40,8 @@ class ComicListSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Comic
-        fields = ('title', 'description', 'genre', 'thumbnail', 'slug', 'author', 'author_username', 'url', 'direct_url')
+        fields = ('title', 'description', 'genre', 'thumbnail', 'slug', 'author', 'author_username', 'url',
+                  'direct_url')
         extra_kwargs = {
             'url': {'lookup_field': 'slug'},
             'genre': {'lookup_field': 'slug'},
@@ -51,7 +52,7 @@ class ComicListSerializer(serializers.HyperlinkedModelSerializer):
 class ChapterListSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ComicChapter
-        fields = ('title', 'thumbnail', 'state', 'read', 'sequence')
+        fields = ('title', 'thumbnail', 'slug', 'state', 'read', 'sequence')
 
 
 class UpdateComicStateSerializer(serializers.HyperlinkedModelSerializer):

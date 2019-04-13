@@ -4,48 +4,21 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import PermissionDenied
-from django.core.paginator import Paginator
-from django.http import Http404
 from django.shortcuts import redirect, get_object_or_404, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 
-from webcomic_site.tools import range_pagination
 from webcomic_site.views import AjaxableResponseMixin, UserResponseMixin, OnlyAuthorOrSuperuserAccessMixin
 from .models import Genre, Comic, ComicChapter, ChapterImage
 
 
 # Create your views here.
-
-
-# class GenreDetailView(DetailView):
-#     model = Genre
-#     template_name = 'genre/detail.html'
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         comic_list = self.object.comics.filter(state=1).order_by('-publish_date')
-#         paginator = Paginator(comic_list, 40)
-#         page = int(self.request.GET.get('page', 1))
-#         comics = paginator.get_page(page)
-#         pagination = range_pagination(page, comics.paginator.num_pages)
-#         context['comics'] = comics
-#         context['pagination'] = pagination
-#         return context
-
 def genre_detail(request, slug):
     genre = get_object_or_404(Genre, slug=slug)
-    # comic_list = genre.comics.filter(state=1).order_by('-publish_date')
-    # paginator = Paginator(comic_list, 40)
-    # page = int(request.GET.get('page', 1))
-    # comics = paginator.get_page(page)
-    # pagination = range_pagination(page, comics.paginator.num_pages)
     context = {
         'genre': genre,
-        # 'comics': comics,
-        # 'pagination': pagination,
     }
     return render(request, 'genre/detail.html', context=context)
 
