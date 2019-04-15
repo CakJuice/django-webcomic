@@ -20,7 +20,6 @@ var ListDataAPI = {
   methods: {
     fetchData: function(url) {
       var self = this;
-      console.log('parent fetch data', self);
       axios.get(url).then(function(response) {
         self.items = response.data.results;
         self.pagination = {
@@ -138,6 +137,29 @@ Vue.component('comic-list-container', {
   extends: ListDataAPI,
   template: '<div>' +
     '<comic-list v-if="items.length > 0" :items="items"></comic-list>' +
+    '<list-pagination v-if="pagination.previous || pagination.next" :pagination="pagination" :baseUrl="baseUrl"></list-pagination>' +
+  '</div>',
+});
+
+Vue.component('chapter-list', {
+  extends: ListItem,
+  template: '<div class="row">' +
+    '<div class="col col-12" v-for="item in items" :key="item.slug">' +
+      '<div class="row my-1 mx-1 py-2 chapter-list">' +
+        '<div class="col col-2 pr-1">' +
+          '<img :src="item.thumbnail" v-if="item.thumbnail" class="img-fluid" loading="lazy">' +
+          '<img :src="defaultThumbnail" v-else class="img-fluid" loading="lazy">' +
+        '</div>' +
+        '<div class="col col-10 pl-1"><h5>{{ item.title }}</h5></div>' +
+      '</div>' +
+    '</div>' +
+  '</div>',
+});
+
+Vue.component('chapter-list-container', {
+  extends: ListDataAPI,
+  template: '<div>' +
+    '<chapter-list v-if="items.length > 0" :items="items"></chapter-list>' +
     '<list-pagination v-if="pagination.previous || pagination.next" :pagination="pagination" :baseUrl="baseUrl"></list-pagination>' +
   '</div>',
 });

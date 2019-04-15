@@ -14,7 +14,7 @@
     {% endif %}
   </div>
 
-  <div id="main-content" class="container my-3">
+  <div class="container my-3">
     {% if messages %}
       {% include 'includes/alert_message.html' %}
     {% endif %}
@@ -26,8 +26,8 @@
           Genre: <a href="{% url 'genre_detail' slug=comic.genre.slug %}">{{ comic.genre.name }}</a>
           - {{ comic.get_state_display }}
         </p>
-        <div>
-          <div class="mt-2" id="chapter-container"></div>
+        <div class="mt-2" id="main-content">
+          <chapter-list-container url="{% url 'api_chapter_list_by_comic' comic_slug=comic.slug %}"></chapter-list-container>
         </div>
       </div>
       <div class="col col-md-3 col-12">
@@ -35,9 +35,8 @@
           <div class="mt-2">
             {% if user.is_authenticated %}
               {% if user == comic.author or user.is_superuser %}
-                <a role="button" href="{% url 'comic_update' slug=comic.slug %}" class="btn btn-primary">
-                  <i class="fas fa-edit"></i> Edit
-                </a>
+                <a role="button" href="{% url 'comic_update' slug=comic.slug %}" class="btn btn-primary">Edit</a>
+                <a role="button" href="{% url 'comic_author' slug=comic.slug %}" class="btn btn-primary">Author Page</a>
                 {% if comic.state == 0 %}
                   <a role="button" href="{% url 'comic_state' slug=comic.slug state=1 %}" class="btn btn-success">Publish</a>
                 {% elif comic.state == 1 %}
@@ -66,47 +65,9 @@
 {% endblock %}
 
 {% block extra_script %}
-<!--<script type="text/babel" src="{# % static 'js/react-chapter-list.js' % #}"></script>-->
-<!--<script type="text/babel" src="{# % static 'js/react-pagination.js' % #}"></script>-->
-<script type="text/javascript">
-  var chapterContainer = document.getElementById('chapter-container');
-  var url = "{% url 'comic_chapter_ajax' comic_slug=comic.slug %}";
-  $.get(url, function(response) {
-    if (response.success && response.chapters.length > 0) {
-      for (var i=0;i<response.chapters.length;i++) {
-        var chapter = response.chapters[i];
-        chapterContainer.innerHTML += getChapterList(chapter);
-      }
-    } else {
-      chapterContainer.innerHTML += getNoChapterText();
-    }
-  });
-</script>
-<script type="text/babel">
-  /*
-  const mainContent = document.getElementById('main-content');
-  let url = "{% url 'comic_chapter_ajax' comic_slug=comic.slug %}";
-
-  {% if request.GET and request.GET.page %}
-    url += '?page=' + {{ request.GET.page }};
-  {% endif %}
-
-  axios.get(url).then((response) => {
-    const data = response.data;
-    if (data.success) {
-      if (data.chapters.length > 0) {
-        mainContent.innerHTML += '<div id="chapter-container"></div>';
-        const chapterContainer = document.getElementById('chapter-container');
-        ReactDOM.render(<ChapterList chapters={data.chapters}/>, chapterContainer);
-      }
-
-      if (data.pagination.has_prev || data.pagination.has_next) {
-        mainContent.innerHTML += '<div id="pagination-container"></div>';
-        const paginationContainer = document.getElementById('pagination-container');
-        ReactDOM.render(<Pagination pagination={data.pagination}/>, paginationContainer);
-      }
-    }
-  });
-  */
+<script>
+  new Vue({
+    el: '#main-content',
+  })
 </script>
 {% endblock %}
