@@ -12,16 +12,23 @@
 {% block title %}{{ genre.name }}{% endblock %}
 
 {% block content %}
-  <div class="container my-3" id="main-content">
+<div class="container my-3" id="main-content">
     <h3>{{ genre.name }}</h3>
-    <div class="row" id="comic-container"></div>
-    <div class="my-3" id="pagination-container"></div>
+<!--    <div class="row" id="comic-container"></div>-->
+<!--    <div class="my-3" id="pagination-container"></div>-->
+    <comic-list-container url="{% url 'api_comic_list_by_genre' genre.slug %}"></comic-list-container>
   </div>
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
-  var url = "{% url 'api_comic_list_by_genre' genre.slug %}";
-  ajaxComicListData(url);
+  // var url = "{% url 'api_comic_list_by_genre' genre.slug %}";
+  // ajaxComicListData(url);
+</script>
+
+<script>
+  new Vue({
+    el: '#main-content',
+  });
 </script>
 {% endblock %}
