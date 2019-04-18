@@ -142,6 +142,12 @@ class ComicChapter(models.Model):
         self.read += 1
         self.save()
 
+    def get_direct_url(self):
+        return reverse('chapter_detail', kwargs={'comic_slug': self.comic.slug, 'chapter_slug': self.slug})
+
+    def get_author_url(self):
+        return reverse('chapter_author', kwargs={'comic_slug': self.comic.slug, 'chapter_slug': self.slug})
+
 
 def upload_chapter_image(instance, filename):
     path = get_upload_chapter_path(instance.chapter)

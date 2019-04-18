@@ -47,6 +47,11 @@ var ListItem = {
       return DEFAULT_THUMBNAIL
     }
   },
+  methods: {
+    redirectUrl: function(url) {
+      window.location.href = url;
+    }
+  },
 }
 
 // List pagination used for all pagination purpose.
@@ -93,7 +98,7 @@ Vue.component('list-pagination', {
 Vue.component('author-chapter-list', {
   extends: ListItem,
   template: '<div class="row">' +
-    '<div class="col col-md-6 col-12" v-for="item in items" :key="item.slug">' +
+    '<div class="col col-md-6 col-12" v-for="item in items" :key="item.slug" @click="redirectUrl(item.author_url)">' +
       '<div class="row my-2 mx-1 py-2 chapter-list">' +
         '<div class="col col-4 pr-1">' +
           '<img :src="item.thumbnail" v-if="item.thumbnail" class="img-fluid" loading="lazy">' +
@@ -126,11 +131,6 @@ Vue.component('comic-list', {
       '</div>' +
     '</div>' +
   '</div>',
-  methods: {
-    redirectUrl: function(url) {
-      window.location.href = url;
-    }
-  },
 });
 
 Vue.component('comic-list-container', {

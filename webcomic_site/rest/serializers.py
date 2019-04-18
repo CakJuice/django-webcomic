@@ -50,9 +50,12 @@ class ComicListSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ChapterListSerializer(serializers.HyperlinkedModelSerializer):
+    direct_url = serializers.ReadOnlyField(source='get_direct_url')
+    author_url = serializers.ReadOnlyField(source='get_author_url')
+
     class Meta:
         model = ComicChapter
-        fields = ('title', 'thumbnail', 'slug', 'state', 'read', 'sequence')
+        fields = ('title', 'thumbnail', 'slug', 'state', 'read', 'sequence', 'direct_url', 'author_url')
 
 
 class UpdateComicStateSerializer(serializers.HyperlinkedModelSerializer):

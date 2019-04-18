@@ -152,6 +152,15 @@ class ChapterDetailView(UserResponseMixin, DetailView):
         return get_object_or_404(ComicChapter, slug=self.kwargs['chapter_slug'])
 
 
+class ChapterAuthorPageView(OnlyAuthorOrSuperuserAccessMixin, DetailView):
+    model = ComicChapter
+    template_name = 'chapter/author_page.html'
+    context_object_name = 'chapter'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(ComicChapter, slug=self.kwargs['chapter_slug'])
+
+
 class ChapterUpdateView(SuccessMessageMixin, AjaxableResponseMixin, UpdateView):
     model = ComicChapter
     template_name = 'chapter/update.html'

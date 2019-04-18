@@ -14,6 +14,7 @@
         <div class="card">
           <div class="card-header">Comic Info</div>
           <div class="card-body">
+            <a href="{% url 'chapter_create' comic_slug=comic.slug %}" class="btn btn-primary">New Chapter</a>
             <h5>Genre: <a href="{% url 'genre_detail' slug=comic.genre.slug %}">{{ comic.genre.name }}</a></h5>
             Thumbnail:
             {% if comic.thumbnail %}
