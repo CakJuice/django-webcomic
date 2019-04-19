@@ -1,0 +1,30 @@
+{% extends 'layouts/main_layout.html' %}
+
+{% block meta_description %}See the comic author portfolio.{% endblock %}
+{% block meta_keywords %}Author, Comic, Free{% endblock %}
+{% block title %}{{ user.username }}{% endblock %}
+
+{% block content %}
+  <div class="container my-3">
+    <div class="row">
+      <div class="col col-md-3 col-12">
+        <h1>{{ user.username }}</h1>
+        <ul>
+          <li><i class="fas fa-envelope"></i> {{ user.email }}</li>
+          <li><i class="fas fa-user-plus"></i> {{ user.date_joined }}</li>
+        </ul>
+      </div>
+      <div class="col col-md-9 col-12" id="main-content">
+        <author-comic-container url="{% url 'api_comic_list_by_author' user.username %}"></author-comic-container>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_script %}
+<script>
+  new Vue({
+    el: '#main-content',
+  });
+</script>
+{% endblock %}

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'webcomic_site.base',
     'webcomic_site.comic',
+    'webcomic_site.author',
     'webcomic_site.ajax',
 ]
 

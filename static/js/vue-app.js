@@ -95,6 +95,7 @@ Vue.component('list-pagination', {
   },
 });
 
+// ------------ author chapter container ------------
 Vue.component('author-chapter-list', {
   extends: ListItem,
   template: '<div class="row">' +
@@ -117,7 +118,34 @@ Vue.component('author-chapter-container', {
     '<list-pagination v-if="pagination.previous || pagination.next" :pagination="pagination" :baseUrl="baseUrl"></list-pagination>' +
   '</div>',
 });
+// ------------ end of author chapter container ------------
 
+// ------------ author comic container ------------
+Vue.component('author-comic-list', {
+  extends: ListItem,
+  template: '<div class="row">' +
+    '<div class="col col-md-6 col-12" v-for="item in items" :key="item.slug" @click="redirectUrl(item.direct_url)">' +
+      '<div class="row my-2 mx-1 py-2 comic-list">' +
+        '<div class="col col-4 pr-1">' +
+          '<img :src="item.thumbnail" v-if="item.thumbnail" class="img-fluid" loading="lazy">' +
+          '<img :src="defaultThumbnail" v-else class="img-fluid" loading="lazy">' +
+        '</div>' +
+        '<div class="col col-8 pl-1"><h5>{{ item.title }}</h5></div>' +
+      '</div>' +
+    '</div>' +
+  '</div>',
+});
+
+Vue.component('author-comic-container', {
+  extends: ListDataAPI,
+  template: '<div>' +
+    '<author-comic-list v-if="items.length > 0" :items="items"></author-comic-list>' +
+    '<list-pagination v-if="pagination.previous || pagination.next" :pagination="pagination" :baseUrl="baseUrl"></list-pagination>' +
+  '</div>',
+})
+// ------------ end of author comic container ------------
+
+// ------------ comic list container ------------
 Vue.component('comic-list', {
   extends: ListItem,
   template: '<div class="row">' +
@@ -140,7 +168,9 @@ Vue.component('comic-list-container', {
     '<list-pagination v-if="pagination.previous || pagination.next" :pagination="pagination" :baseUrl="baseUrl"></list-pagination>' +
   '</div>',
 });
+// ------------ end of comic list container ------------
 
+// ------------ chapter list container ------------
 Vue.component('chapter-list', {
   extends: ListItem,
   template: '<div class="row">' +
@@ -163,3 +193,4 @@ Vue.component('chapter-list-container', {
     '<list-pagination v-if="pagination.previous || pagination.next" :pagination="pagination" :baseUrl="baseUrl"></list-pagination>' +
   '</div>',
 });
+// ------------ end of chapter list container ------------

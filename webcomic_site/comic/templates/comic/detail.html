@@ -1,5 +1,4 @@
 {% extends 'layouts/main_layout.html' %}
-{% load static %}
 
 {% block meta_description %}{{ comic.description }}{% endblock %}
 {% block meta_keywords %}Read, Comic, Free, {{ comic.genre.name }}{% endblock %}
@@ -31,26 +30,24 @@
         </div>
       </div>
       <div class="col col-md-3 col-12">
-        <div>
-          <div class="mt-2">
-            {% if user.is_authenticated %}
-              {% if user == comic.author or user.is_superuser %}
-                <a role="button" href="{% url 'comic_update' slug=comic.slug %}" class="btn btn-primary">Edit</a>
-                <a role="button" href="{% url 'comic_author' slug=comic.slug %}" class="btn btn-primary">Author Page</a>
-                {% if comic.state == 0 %}
-                  <a role="button" href="{% url 'comic_state' slug=comic.slug state=1 %}" class="btn btn-success">Publish</a>
-                {% elif comic.state == 1 %}
-                  <a role="button" href="{% url 'comic_state' slug=comic.slug state=9 %}" class="btn btn-secondary">Archive</a>
-                {% else %}
-                  <a role="button" href="{% url 'comic_state' slug=comic.slug state=0 %}" class="btn btn-secondary">Set to Draft</a>
-                {% endif %}
+        <div class="mt-2">
+          {% if user.is_authenticated %}
+            {% if user == comic.author or user.is_superuser %}
+              <a role="button" href="{% url 'comic_update' slug=comic.slug %}" class="btn btn-primary">Edit</a>
+              <a role="button" href="{% url 'comic_author' slug=comic.slug %}" class="btn btn-primary">Author Page</a>
+              {% if comic.state == 0 %}
+                <a role="button" href="{% url 'comic_state' slug=comic.slug state=1 %}" class="btn btn-success">Publish</a>
+              {% elif comic.state == 1 %}
+                <a role="button" href="{% url 'comic_state' slug=comic.slug state=9 %}" class="btn btn-secondary">Archive</a>
+              {% else %}
+                <a role="button" href="{% url 'comic_state' slug=comic.slug state=0 %}" class="btn btn-secondary">Set to Draft</a>
               {% endif %}
-              <!--<button class="btn btn-success" id="btn-new-chapter" data-toggle="modal" data-target="#webcomic-modal">-->
-                <!--<i class="fas fa-plus-circle"></i> New Chapter-->
-              <!--</button>-->
             {% endif %}
-            <p>{{ comic.description }}</p>
-          </div>
+          <!--<button class="btn btn-success" id="btn-new-chapter" data-toggle="modal" data-target="#webcomic-modal">-->
+            <!--<i class="fas fa-plus-circle"></i> New Chapter-->
+          <!--</button>-->
+          {% endif %}
+          <p>{{ comic.description }}</p>
         </div>
         <div class="comic-detail-thumbnail mt-2">
           {% if comic.thumbnail %}

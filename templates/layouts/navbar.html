@@ -24,6 +24,7 @@
             <a class="nav-link dropdown-toggle" id="userNavbarDropdown" role="button" href="#" data-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false">{{ user.get_username }}</a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+              <a class="dropdown-item" href="{% url 'author_detail' username=user.username %}">Profile</a>
               <a class="dropdown-item" href="{% url 'comic_create' %}">Create New Comic</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>

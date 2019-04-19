@@ -21,10 +21,13 @@ from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify
 
 from webcomic_site.base import views as base_views
 from webcomic_site.comic import views as comic_views
+from webcomic_site.author import views as author_views
 
 urlpatterns = [
-    # base routes
+    # homepage routes
     path('', base_views.homepage, name='homepage'),
+
+    # base routes
     path('signup/', base_views.signup, name='signup'),
     path('<username>/signup-success/', base_views.signup_success, name='signup_success'),
     path('activation/<token>/', base_views.user_activation, name='user_activation'),
@@ -59,6 +62,9 @@ urlpatterns = [
     # genre routes
     # path('genre/<slug:slug>/', comic_views.GenreDetailView.as_view(), name='genre_detail'),
     path('genre/<slug:slug>/', comic_views.genre_detail, name='genre_detail'),
+
+    # user author routes
+    path('profile/<username>/', author_views.AuthorDetailView.as_view(), name='author_detail'),
 
     # comic routes
     path('comic/create/', comic_views.ComicCreateView.as_view(), name='comic_create'),
