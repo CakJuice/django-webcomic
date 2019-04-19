@@ -49,6 +49,23 @@ class ComicListSerializer(serializers.HyperlinkedModelSerializer):
         }
 
 
+class AuthorComicListSerializer(serializers.HyperlinkedModelSerializer):
+    direct_url = serializers.ReadOnlyField(source='get_direct_url')
+    author_username = serializers.CharField(source='author.username', read_only=True)
+    author_url = serializers.ReadOnlyField(source='get_author_url')
+    chapter_create_url = serializers.ReadOnlyField(source='get_chapter_create_url')
+
+    class Meta:
+        model = Comic
+        fields = ('title', 'description', 'genre', 'thumbnail', 'slug', 'author', 'author_username', 'url',
+                  'direct_url', 'author_url', 'chapter_create_url')
+        extra_kwargs = {
+            'url': {'lookup_field': 'slug'},
+            'genre': {'lookup_field': 'slug'},
+            'author': {'lookup_field': 'username'},
+        }
+
+
 class ChapterListSerializer(serializers.HyperlinkedModelSerializer):
     direct_url = serializers.ReadOnlyField(source='get_direct_url')
     author_url = serializers.ReadOnlyField(source='get_author_url')

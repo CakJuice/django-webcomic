@@ -1,3 +1,6 @@
+// set axios as vue instance http object.
+Vue.prototype.$http = axios;
+
 // ListDataAPI used for creating data list from API consume.
 // It will get data with AJAX then passing to list item and list pagination.
 // It needs `url` props to passing URL of API consume.
@@ -20,7 +23,7 @@ var ListDataAPI = {
   methods: {
     fetchData: function(url) {
       var self = this;
-      axios.get(url).then(function(response) {
+      this.$http.get(url).then(function(response) {
         self.items = response.data.results;
         self.pagination = {
           count: response.data.count,
@@ -100,7 +103,7 @@ Vue.component('author-chapter-list', {
   extends: ListItem,
   template: '<div class="row">' +
     '<div class="col col-md-6 col-12" v-for="item in items" :key="item.slug" @click="redirectUrl(item.author_url)">' +
-      '<div class="row my-2 mx-1 py-2 chapter-list">' +
+      '<div class="row my-2 mx-1 py-2 chapter-list pointer">' +
         '<div class="col col-4 pr-1">' +
           '<img :src="item.thumbnail" v-if="item.thumbnail" class="img-fluid" loading="lazy">' +
           '<img :src="defaultThumbnail" v-else class="img-fluid" loading="lazy">' +
@@ -124,13 +127,17 @@ Vue.component('author-chapter-container', {
 Vue.component('author-comic-list', {
   extends: ListItem,
   template: '<div class="row">' +
-    '<div class="col col-md-6 col-12" v-for="item in items" :key="item.slug" @click="redirectUrl(item.direct_url)">' +
-      '<div class="row my-2 mx-1 py-2 comic-list">' +
+    '<div class="col col-md-6 col-12" v-for="item in items" :key="item.slug">' +
+      '<div class="row my-2 mx-1 py-2 comic-list pointer">' +
         '<div class="col col-4 pr-1">' +
           '<img :src="item.thumbnail" v-if="item.thumbnail" class="img-fluid" loading="lazy">' +
           '<img :src="defaultThumbnail" v-else class="img-fluid" loading="lazy">' +
         '</div>' +
-        '<div class="col col-8 pl-1"><h5>{{ item.title }}</h5></div>' +
+        '<div class="col col-8 pl-1">' +
+          '<h5><a :href="item.direct_url">{{ item.title }}</a></h5>' +
+          '<a :href="item.chapter_create_url" class="btn btn-primary">New Chapter</a>' +
+          '<a :href="item.author_url" class="btn btn-primary">Author Page</a>' +
+        '</div>' +
       '</div>' +
     '</div>' +
   '</div>',
@@ -175,7 +182,7 @@ Vue.component('chapter-list', {
   extends: ListItem,
   template: '<div class="row">' +
     '<div class="col col-12" v-for="item in items" :key="item.slug">' +
-      '<div class="row my-1 mx-1 py-2 chapter-list">' +
+      '<div class="row my-1 mx-1 py-2 chapter-list pointer">' +
         '<div class="col col-2 pr-1">' +
           '<img :src="item.thumbnail" v-if="item.thumbnail" class="img-fluid" loading="lazy">' +
           '<img :src="defaultThumbnail" v-else class="img-fluid" loading="lazy">' +

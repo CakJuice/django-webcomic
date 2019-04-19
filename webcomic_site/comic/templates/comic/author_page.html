@@ -5,15 +5,12 @@
 
 {% block content %}
   <div class="container my-3" id="main-content">
-    <h1>{{ comic.title }}</h1>
     <div class="row">
-      <div class="col col-md-9 col-12">
-        <author-chapter-container url="{% url 'api_chapter_list_by_comic' comic_slug=comic.slug %}?view=author"></author-chapter-container>
-      </div>
       <div class="col col-md-3 col-12">
         <div class="card">
-          <div class="card-header">Comic Info</div>
+          <div class="card-header">{{ comic.title }}</div>
           <div class="card-body">
+            <a href="{% url 'comic_update' slug=comic.slug %}" class="btn btn-primary">Edit</a>
             <a href="{% url 'chapter_create' comic_slug=comic.slug %}" class="btn btn-primary">New Chapter</a>
             <h5>Genre: <a href="{% url 'genre_detail' slug=comic.genre.slug %}">{{ comic.genre.name }}</a></h5>
             Thumbnail:
@@ -34,6 +31,9 @@
             <p>Last Update: {{ comic.updated_at|date:"d-m-Y" }}</p>
           </div>
         </div>
+      </div>
+      <div class="col col-md-9 col-12">
+        <author-chapter-container url="{% url 'api_chapter_list_by_comic' comic_slug=comic.slug %}?view=author"></author-chapter-container>
       </div>
     </div>
   </div>

@@ -41,7 +41,7 @@ class ComicListByGenre(paginations.PaginationExtraContentMixin, generics.ListAPI
 
 
 class ComicListByAuthor(paginations.PaginationExtraContentMixin, generics.ListAPIView):
-    serializer_class = serializers.ComicListSerializer
+    serializer_class = serializers.AuthorComicListSerializer
     pagination_class = paginations.StandardPagination
 
     def get_queryset(self):

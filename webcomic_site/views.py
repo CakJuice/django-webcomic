@@ -47,7 +47,6 @@ class UserResponseMixin:
         else:
             is_allowed = obj.state == 1
 
-        print(is_allowed, request.user.is_superuser, request.user)
         if is_allowed:
             return super().dispatch(request, *args, **kwargs)
         raise Http404

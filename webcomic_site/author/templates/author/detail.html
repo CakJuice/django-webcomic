@@ -7,14 +7,14 @@
 {% block content %}
   <div class="container my-3">
     <div class="row">
-      <div class="col col-md-3 col-12">
+      <div class="col col-lg-3 col-12">
         <h1>{{ user.username }}</h1>
         <ul>
           <li><i class="fas fa-envelope"></i> {{ user.email }}</li>
           <li><i class="fas fa-user-plus"></i> {{ user.date_joined }}</li>
         </ul>
       </div>
-      <div class="col col-md-9 col-12" id="main-content">
+      <div class="col col-lg-9 col-12" id="main-content">
         <author-comic-container url="{% url 'api_comic_list_by_author' user.username %}"></author-comic-container>
       </div>
     </div>

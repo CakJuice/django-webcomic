@@ -93,6 +93,12 @@ class Comic(models.Model):
     def get_direct_url(self):
         return reverse('comic_detail', kwargs={'slug': self.slug})
 
+    def get_author_url(self):
+        return reverse('comic_author', kwargs={'slug': self.slug})
+
+    def get_chapter_create_url(self):
+        return reverse('chapter_create', kwargs={'comic_slug': self.slug})
+
 
 def get_upload_chapter_path(instance):
     path = get_upload_comic_path(instance=instance.comic)
