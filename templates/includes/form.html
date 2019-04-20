@@ -15,11 +15,11 @@
 
     {% if field.field.widget.input_type == 'file' %}
       <div class="custom-file">
-        {% render_field field class=field|input_class v-model=field.name %}
+        {% render_field field class=field|input_class %}
         <label class="custom-file-label" for="{{ field.auto_id }}">Choose file</label>
       </div>
     {% else %}
-      {% render_field field class=field|input_class v-model=field.name %}
+      {% render_field field class=field|input_class %}
     {% endif %}
 
     {% if form.is_bound %}

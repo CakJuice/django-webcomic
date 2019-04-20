@@ -9,8 +9,7 @@
     <div class="row justify-content-center">
       <div class="col col-lg-6 col-md-8 col-12">
         <h3>Create New Comic</h3>
-<!--        <form method="POST" enctype="multipart/form-data" onsubmit="submitFormAjax(this); return false;" novalidate>-->
-        <form method="POST" enctype="multipart/form-data" @submit.prevent="submitForm" novalidate>
+        <form method="POST" enctype="multipart/form-data" onsubmit="submitFormAjax(this); return false;" novalidate>
           {% csrf_token %}
           {% include 'includes/form.html' %}
           <button type="submit" class="btn btn-success">Submit</button>
@@ -19,43 +18,4 @@
       </div>
     </div>
   </div>
-{% endblock %}
-
-{% block extra_script %}
-<script>
-  var urlPost = "{% url 'comic_create' %}";
-  var comicForm = new Vue({
-    el: '#main-content',
-    data: {
-      csrfmiddlewaretoken: '{{ csrf_token }}',
-      title: '',
-      description: '',
-      genre: '',
-      errors: [
-        title: '',
-        description: '',
-        genre: '',
-      ]
-    },
-    methods: {
-      submitForm: function() {
-        console.log(this);
-        var self = this;
-        this.$http.post(urlPost, {
-          csrfmiddlewaretoken: this.csrfmiddlewaretoken,
-          title: this.title,
-          description: this.description,
-          genre: this.genre,
-        }, {
-          headers: {
-            'X-CSRFToken': this.csrfmiddlewaretoken,
-            'X-Requested-With': 'XMLHttpRequest',
-          },
-        }).then(function(response) {
-          console.log(response);
-        });
-      },
-    },
-  });
-</script>
 {% endblock %}
