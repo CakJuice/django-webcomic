@@ -91,50 +91,39 @@ function ajaxPostData(url, token, $form) {
     dataType: 'json',
     data: formData,
   }).done(function(response) {
-    console.log(response);
+    if (response.hasOwnProperty('success')) {
+      // redirect when success
+      window.location.href = response.redirect;
+      return;
+    }
+
+    var isAllErrors = false;
+    if (response.hasOwnProperty('__all__')) {
+      isAllErrors = true;
+      var $alertDOM = getAlertFormDOM(response['__all__']);
+      $form.insertBefore($alertDOM, $form.firstChild);
+    }
+
+    var $formChilds = getChildInputElement($form);
+
+    for (var i=0;i<$formChilds.length;i++) {
+      var $field = $formChilds[i];
+      var name = $field.getAttribute('name');
+      if (isAllErrors) {
+        $field.classList.add('is-invalid');
+      } else {
+        if (name in response) {
+          $field.classList.add('is-invalid');
+          var $feedback = getFieldInvalidFeedback(response[name])
+          $field.parentNode.insertBefore($feedback, $field.nextSibling);
+        } else {
+          $field.classList.add('is-valid');
+        }
+      }
+    }
   }).fail(function(response) {
-    console.log(response);
+    console.log("Ajax POST failed!");
   });
-//  xhr.onreadystatechange = function() {
-//    if (this.readyState == 4 && this.status == 200) {
-//      var response = JSON.parse(this.response);
-//      if (response.hasOwnProperty('success')) {
-//        // success
-//        window.location.href = response.redirect;
-//      } else {
-//        // has form errors
-//        var isAllErrors = false;
-//        if (response.hasOwnProperty('__all__')) {
-//          isAllErrors = true;
-//          var $alertDOM = getAlertFormDOM(response['__all__']);
-//          $form.insertBefore($alertDOM, $form.firstChild);
-//        }
-//
-//        var $formChilds = getChildInputElement($form);
-//
-//        for (var i=0;i<$formChilds.length;i++) {
-//          var $field = $formChilds[i];
-//          var name = $field.getAttribute('name');
-//          if (isAllErrors) {
-//            $field.classList.add('is-invalid');
-//          } else {
-//            if (name in response) {
-//              $field.classList.add('is-invalid');
-//              var $feedback = getFieldInvalidFeedback(response[name])
-//              $field.parentNode.insertBefore($feedback, $field.nextSibling);
-//            } else {
-//              $field.classList.add('is-valid');
-//            }
-//          }
-//        }
-//      }
-//    }
-//  }
-//
-//  xhr.open("POST", url, true);
-//  xhr.setRequestHeader('X-CSRFToken', token);
-//  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-//  xhr.send(formData);
 }
 
 function getFieldInvalidFeedback(message) {
