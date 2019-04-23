@@ -33,55 +33,23 @@
   {% block footer %}{% endblock %}
 
   {% include 'includes/modal.html' %}
-  <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 
-  <!-- Production -->
-<!--  <script src="https://code.jquery.com/jquery-3.3.1.min.js"-->
-<!--          integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>-->
-<!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"-->
-<!--          integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>-->
-<!--  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"-->
-<!--        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>-->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+          integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+          integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-  <!--<script src="https://unpkg.com/axios/dist/axios.min.js"></script>-->
-  <!--<script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>-->
-  <!--<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>-->
-  <!--<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>-->
-  <!-- end of production head -->
-
-  <!-- Development -->
-  <!--<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>-->
-  <!--<script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>-->
-  <!--<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>-->
-  <!-- end of development head -->
   <script type="text/javascript">
     // Parse django url to javascript variable.
     var DEFAULT_BANNER = "{{ DEFAULT_BANNER }}";
     var DEFAULT_THUMBNAIL = "{{ DEFAULT_THUMBNAIL }}";
   </script>
-  <script type="text/javascript" src="{% static 'js/app.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/jq-app.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/vue-app.js' %}"></script>
-  <!--<script type="text/babel" src="{# % static 'js/react-navbar.js' % #}"></script>-->
-<!--  <script type="text/babel">-->
-  <script type="text/javascript">
-    /*
-    let isAuthenticated = false;
-    let username = null;
-    if ('{{ request.user.is_authenticated }}' === 'True') {
-      isAuthenticated = true;
-      username = '{{ request.user.get_username }}';
-    }
-
-    ReactDOM.render(<Navbar isAuthenticated={isAuthenticated} username={username}/>, document.getElementById('navbar-container'));
-    */
-    /*
-    ReactDOM.render(<GenreDropdown/>, document.getElementById('navGenre'))
-    */
-  </script>
   {% block extra_script %}{% endblock %}
 </body>
 </html>

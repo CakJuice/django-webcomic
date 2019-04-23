@@ -1,6 +1,3 @@
-// set axios as vue instance http object.
-Vue.prototype.$http = axios;
-
 // ListDataAPI used for creating data list from API consume.
 // It will get data with AJAX then passing to list item and list pagination.
 // It needs `url` props to passing URL of API consume.
@@ -23,16 +20,16 @@ var ListDataAPI = {
   methods: {
     fetchData: function(url) {
       var self = this;
-      this.$http.get(url).then(function(response) {
-        self.items = response.data.results;
+      $.get(url).then(function(response) {
+        self.items = response.results;
         self.pagination = {
-          count: response.data.count,
-          current: response.data.current,
-          end: response.data.end,
-          next: response.data.next,
-          numPages: response.data.num_pages,
-          previous: response.data.previous,
-          start: response.data.start,
+          count: response.count,
+          current: response.current,
+          end: response.end,
+          next: response.next,
+          numPages: response.num_pages,
+          previous: response.previous,
+          start: response.start,
         };
       });
     },
