@@ -20,14 +20,9 @@ function submitFormAjax($form) {
     urlTarget = window.location.href;
   }
 
-  var token = $form.children[0].value;
-  ajaxPostData(urlTarget, token, $form);
-}
-
-function getXHR() {
-  // get XMLHttpRequest of browser
-  if (window.XMLHttpRequest) return new window.XMLHttpRequest();
-  return window.ActiveXObject('Microsoft.XMLHTTP');
+//  var token = $form.children[0].value;
+//  ajaxPostData(urlTarget, token, $form);
+  ajaxPostData(urlTarget, $form);
 }
 
 function clearFieldStatus($field) {
@@ -68,7 +63,7 @@ function getChildInputElement($parent) {
   return $inputs;
 }
 
-function ajaxPostData(url, token, $form) {
+function ajaxPostData(url, $form) {
   // Handle ajax form post data
   removeAlertForm($form);
   var xhr = getXHR();
