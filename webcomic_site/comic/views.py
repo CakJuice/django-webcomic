@@ -39,6 +39,11 @@ class ComicCreateView(SuccessMessageMixin, AjaxableResponseMixin, CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.method == 'GET' and self.request.is_ajax():
+            return render(self.request, 'comic/create_modal.html', context=context)
+        return super().render_to_response(context, **response_kwargs)
+
 
 class ComicDetailView(UserResponseMixin, DetailView):
     model = Comic

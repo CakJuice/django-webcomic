@@ -11,6 +11,13 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+function ajaxGetForm(url, elemParent) {
+  $.get(url, function(response) {
+    $elem = document.getElementById(elemParent);
+    $elem.innerHTML = response;
+  });
+}
+
 function submitFormAjax($form) {
   /* Submit form via ajax.
    * param $form: DOM of form element.
@@ -66,7 +73,6 @@ function getChildInputElement($parent) {
 function ajaxPostData(url, $form) {
   // Handle ajax form post data
   removeAlertForm($form);
-  var xhr = getXHR();
   var formData = new FormData($form);
   $.ajax({
     method: 'POST',

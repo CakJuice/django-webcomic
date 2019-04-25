@@ -25,7 +25,9 @@
                aria-haspopup="true" aria-expanded="false">{{ user.get_username }}</a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
               <a class="dropdown-item" href="{% url 'author_detail' username=user.username %}">Profile</a>
-              <a class="dropdown-item" href="{% url 'comic_create' %}">Create New Comic</a>
+<!--              <a class="dropdown-item" href="{% url 'comic_create' %}">Create New Comic</a>-->
+              <a class="dropdown-item" href="#" role="button" data-toggle="modal" data-target="#webcomic-modal"
+                 onclick="ajaxGetForm('{% url 'comic_create' %}', 'modal-content')">Create New Comic</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
             </div>
