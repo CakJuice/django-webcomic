@@ -1,3 +1,89 @@
+// Handle login form with modal, then post data via ajax.
+Vue.component('login-form', {
+  props: ['action', 'token', 'next'],
+  data: function() {
+    return {
+      username: '',
+      password: '',
+      statusValid: {
+        all: null,
+        username: null,
+        password: null,
+      },
+      feedback: {
+        all: null,
+        username: '',
+        password: '',
+      },
+    };
+  },
+  methods: {
+    submitLogin: function() {
+      this.statusValid = {
+        all: null,
+        username: null,
+        password: null,
+      };
+
+      this.feedback = {
+        all: null,
+        username: null,
+        password: null,
+      };
+
+      var data = {
+        csrfmiddlewaretoken: this.token,
+        username: this.username,
+        password: this.password,
+      }
+
+      var self = this;
+
+      $.post(this.action, data).done(function(response) {
+        if (response.hasOwnProperty('success')) {
+          window.location.href = self.next;
+        } else {
+          if (response.hasOwnProperty('__all__')) {
+            self.statusValid.all = false;
+            self.feedback.all = response['__all__'][0];
+          } else {
+            if (response.hasOwnProperty('username')) {
+              self.statusValid.username = false;
+              self.feedback.username = response['username'][0];
+            } else {
+              self.statusValid.username = true;
+            }
+
+            if (response.hasOwnProperty('password')) {
+              self.statusValid.password = false;
+              self.feedback.password = response['password'][0];
+            } else {
+              self.statusValid.password = true;
+            }
+          }
+        }
+      });
+    },
+  },
+  template: '<form :action="action" method="POST" @submit.prevent="submitLogin" novalidate>' +
+    '<div class="alert alert-danger" role="alert" v-if="statusValid.all === false">' +
+      '<p class="mb-1">{{ feedback.all }}</p>' +
+    '</div>' +
+    '<input type="hidden" name="csrfmiddlewaretoken" v-model="token">' +
+    '<div class="form-group">' +
+      '<label for="modal_username">Username:</label>' +
+      '<input type="text" name="username" autofocus class="form-control" :class="{ \'is-valid\': statusValid.username === true, \'is-invalid\': statusValid.username === false }" required id="modal_username" v-model="username">' +
+      '<div class="invalid-feedback" v-if="statusValid.username === false">{{ feedback.username }}</div>' +
+    '</div>' +
+    '<div class="form-group">' +
+      '<label for="modal_password">Password:</label>' +
+      '<input type="password" name="password" class="form-control" :class="{ \'is-valid\': statusValid.password === true, \'is-invalid\': statusValid.password === false }" required id="modal_password" v-model="password">' +
+      '<div class="invalid-feedback" v-if="statusValid.password === false">{{ feedback.password }}</div>' +
+    '</div>' +
+    '<button type="submit" class="btn btn-primary btn-block">Login</button>' +
+  '</form>',
+});
+
 // ListDataAPI used for creating data list from API consume.
 // It will get data with AJAX then passing to list item and list pagination.
 // It needs `url` props to passing URL of API consume.
@@ -10,7 +96,7 @@ var ListDataAPI = {
         previous: null,
         next: null,
       },
-    }
+    };
   },
   computed: {
     baseUrl: function() {

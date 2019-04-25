@@ -33,7 +33,10 @@
         {% else %}
           <li class="nav-item">
             <a class="btn btn-outline-success" role="button" href="{% url 'signup' %}">Sign Up</a>
-            <a class="btn btn-info ml-1" role="button" href="{% url 'login' %}">Login</a>
+<!--            <a class="btn btn-info ml-1" role="button" href="{# % url 'login' % #}">Login</a>-->
+            <button class="btn btn-info ml-1" type="button"  data-toggle="modal" data-target="#login-modal">
+              Login
+            </button>
           </li>
         {% endif %}
       </ul>
