@@ -53,12 +53,8 @@
 
   {% if not request.user.is_authenticated %}
     {% include 'base/login_modal.html' %}
-    <script>
-      var loginModal = new Vue({
-        el: '#login-modal',
-      });
-    </script>
   {% endif %}
+
   {% block extra_script %}{% endblock %}
 </body>
 </html>
